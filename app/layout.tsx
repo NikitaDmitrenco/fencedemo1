@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { site } from '@/content/site.config';
+import { siteUrl } from '@/lib/site-url';
 import './globals.css';
 
 // Self-hosted шрифт: без запросов к стороннему CDN и без скачка вёрстки.
@@ -9,8 +10,6 @@ const manrope = Manrope({
   display: 'swap',
   variable: '--font-manrope',
 });
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://fencedemo1.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
