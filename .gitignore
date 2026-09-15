@@ -25,3 +25,7 @@ npm-debug.log*
 yarn-error.log*
 .idea/
 .vscode/
+
+# Исходники фотографий: обрабатываются локально через tools/photos.mjs,
+# в репозиторий попадают только готовые файлы из public/media.
+photos-raw/
