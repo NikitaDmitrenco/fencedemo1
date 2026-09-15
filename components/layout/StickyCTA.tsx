@@ -71,9 +71,9 @@ export function StickyCTA() {
 
         <a
           href={CALC_ANCHOR}
-          className="inline-flex min-h-13 flex-[1.3] items-center justify-center rounded-[var(--radius-control)] bg-[var(--accent)] font-bold text-[var(--color-accent-ink)]"
+          className="inline-flex min-h-13 flex-1 items-center justify-center rounded-[var(--radius-control)] bg-[var(--accent)] font-bold whitespace-nowrap text-[var(--color-accent-ink)]"
         >
-          Рассчитать стоимость
+          Рассчитать
         </a>
       </div>
     </div>
