@@ -36,13 +36,18 @@ export function Trust() {
         <div>
           <dl className="grid grid-cols-2 gap-x-8 gap-y-8">
             {facts.map((fact, i) => (
-              <Reveal key={fact.label} delay={i * 60}>
-                <div>
-                  <dd className="text-4xl font-bold text-white lg:text-5xl">
-                    {factText(fact.value)}
-                  </dd>
-                  <dt className="mt-1.5 text-[0.9375rem] text-white/60">{fact.label}</dt>
-                </div>
+              // Обёртка Reveal сама выступает группирующим div: внутри <dl>
+              // допустим ровно один уровень <div> вокруг пары <dt>/<dd>,
+              // и лишний вложенный элемент делает разметку недопустимой.
+              //
+              // Порядок тоже обязателен — <dt> перед своим <dd>. Визуально
+              // цифра сверху, и это задаётся направлением flex, а не
+              // перестановкой элементов в разметке.
+              <Reveal key={fact.label} delay={i * 60} className="flex flex-col-reverse">
+                <dt className="mt-1.5 text-[0.9375rem] text-white/60">{fact.label}</dt>
+                <dd className="text-4xl font-bold text-white lg:text-5xl">
+                  {factText(fact.value)}
+                </dd>
               </Reveal>
             ))}
           </dl>

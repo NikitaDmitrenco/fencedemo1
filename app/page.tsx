@@ -14,6 +14,7 @@ import {
   Faq,
   Contacts,
 } from '@/components/sections';
+import { localBusinessSchema } from '@/lib/schema-org';
 
 /**
  * Лендинг. Порядок секций = маршрут посетителя из ТЗ:
@@ -24,6 +25,8 @@ import {
  * перестановка строк здесь, а не правка компонентов.
  */
 export default function Home() {
+  const business = localBusinessSchema();
+
   return (
     <>
       <Header />
@@ -51,6 +54,14 @@ export default function Home() {
 
       <Footer />
       <StickyCTA />
+
+      {business && (
+        <script
+          type="application/ld+json"
+          // Данные собраны из конфига на сервере, стороннего ввода здесь нет.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(business) }}
+        />
+      )}
     </>
   );
 }

@@ -55,8 +55,8 @@ export function Cases() {
     >
       <ul className="grid gap-6 lg:grid-cols-2">
         {site.cases.map((item, i) => (
-          <Reveal key={item.title} delay={i * 60} className="h-full">
-            <Card as="li" className="flex h-full list-none flex-col p-4 sm:p-5">
+          <Reveal key={item.title} as="li" delay={i * 60} className="h-full">
+            <Card className="flex h-full flex-col p-4 sm:p-5">
               <Gallery item={item} />
 
               <div className="mt-5 flex flex-1 flex-col">

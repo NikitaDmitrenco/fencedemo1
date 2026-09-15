@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { hero, product, gateProduct, object } from './fence-art.mjs';
+import { hero, product, gateProduct, object, ogImage } from './fence-art.mjs';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -8,6 +8,7 @@ mkdirSync(OUT, { recursive: true });
 
 const jobs = [
   ['hero.jpg', hero({ w: 2400, h: 1350, type: 'profnastil', seed: 11 })],
+  ['og.jpg', ogImage()],
 
   ['product-profnastil.jpg', product({ w: 1200, h: 900, type: 'profnastil', seed: 21 })],
   ['product-evroshtaketnik.jpg', product({ w: 1200, h: 900, type: 'evroshtaketnik', seed: 22 })],

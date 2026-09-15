@@ -32,8 +32,8 @@ export function Reviews() {
     >
       <ul className="grid gap-5 lg:grid-cols-3">
         {site.reviews.map((review, i) => (
-          <Reveal key={review.url + review.author} delay={i * 60} className="h-full">
-            <Card as="li" className="flex h-full list-none flex-col p-6">
+          <Reveal key={review.url + review.author} as="li" delay={i * 60} className="h-full">
+            <Card className="flex h-full flex-col p-6">
               <div className="flex items-center gap-3">
                 <span
                   aria-hidden="true"

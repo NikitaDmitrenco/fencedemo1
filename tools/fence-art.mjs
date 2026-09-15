@@ -195,3 +195,36 @@ export function object({ w, h, type, seed, spans = 4, withGate = false }) {
   if (withGate) body += gate(type, w * 0.08, y - h * 0.02, w * 0.36, fh + h * 0.02, s);
   return shell(w, h, seed, body);
 }
+
+/**
+ * Превью для мессенджеров и соцсетей (Open Graph).
+ *
+ * Для этого демо картинка важнее обычного: ссылку отправляют владельцам
+ * компаний в WhatsApp и Telegram, и превью — первое, что они видят,
+ * ещё до открытия сайта.
+ *
+ * Текст здесь общий для всех клиентов (оффер, а не название компании),
+ * поэтому перегенерировать картинку под каждого не нужно.
+ */
+export function ogImage({ w = 1200, h = 630, type = 'profnastil' } = {}) {
+  const s = h / 900;
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+  ${defs(900)}
+  <rect width="${w}" height="${h}" fill="url(#bg)"/>
+  <g opacity="0.55">${run(type, w * 0.42, -h * 0.05, w * 0.7, h * 1.1, s, 2)}</g>
+  <rect width="${w}" height="${h}" fill="url(#keylight)"/>
+  <rect width="${w}" height="${h}" fill="url(#falloff)"/>
+  <rect x="0" y="0" width="${w * 0.62}" height="${h}" fill="#0B0F12" opacity="0.72"/>
+
+  <rect x="${w * 0.067}" y="${h * 0.26}" width="${w * 0.05}" height="${6}" rx="3" fill="${ACCENT}"/>
+
+  <text x="${w * 0.067}" y="${h * 0.42}" font-family="Manrope" font-size="${h * 0.105}" font-weight="700" fill="#FFFFFF" letter-spacing="-1.5">Заборы и ворота</text>
+  <text x="${w * 0.067}" y="${h * 0.545}" font-family="Manrope" font-size="${h * 0.105}" font-weight="700" fill="#FFFFFF" letter-spacing="-1.5">под ключ</text>
+
+  <text x="${w * 0.067}" y="${h * 0.655}" font-family="Manrope" font-size="${h * 0.042}" font-weight="500" fill="#FFFFFF" opacity="0.66">Изготовление · доставка · монтаж</text>
+
+  <rect x="${w * 0.067}" y="${h * 0.73}" width="${w * 0.3}" height="${h * 0.095}" rx="12" fill="${ACCENT}"/>
+  <text x="${w * 0.067 + w * 0.15}" y="${h * 0.793}" text-anchor="middle" font-family="Manrope" font-size="${h * 0.038}" font-weight="700" fill="#14181B">Рассчитать стоимость</text>
+</svg>`;
+}

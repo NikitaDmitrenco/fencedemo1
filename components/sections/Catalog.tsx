@@ -27,8 +27,8 @@ export function Catalog() {
     >
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {site.products.map((product, i) => (
-          <Reveal key={product.slug} delay={i * 60} className="h-full">
-            <Card as="li" interactive className="flex h-full list-none flex-col overflow-hidden">
+          <Reveal key={product.slug} as="li" delay={i * 60} className="h-full">
+            <Card interactive className="flex h-full flex-col overflow-hidden">
               <Link href={`/?type=${product.slug}#calc` as Route} className="flex h-full flex-col">
                 <div className="relative aspect-4/3 w-full bg-[var(--color-ink)]">
                   <Image

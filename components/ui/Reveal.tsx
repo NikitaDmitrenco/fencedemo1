@@ -16,16 +16,23 @@ import { clsx } from '@/lib/clsx';
  * в globals.css, а на случай выключенного JS там же лежит noscript-правило.
  */
 export function Reveal({
+  as: Tag = 'div',
   className,
   delay = 0,
   children,
 }: {
+  /**
+   * Тег обёртки. Внутри <ul>/<ol> обязателен 'li', а внутри <dl> — 'div':
+   * посторонний <div> между списком и его элементами делает разметку
+   * недопустимой, и экранные дикторы перестают объявлять список списком.
+   */
+  as?: 'div' | 'li';
   className?: string;
   /** Задержка в мс — для лёгкого каскада внутри одной группы карточек. */
   delay?: number;
   children: React.ReactNode;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement & HTMLLIElement>(null);
 
   useEffect(() => {
     const node = ref.current;
@@ -58,12 +65,12 @@ export function Reveal({
   }, []);
 
   return (
-    <div
+    <Tag
       ref={ref}
-      className={clsx('reveal', className)}
+      className={clsx('reveal', Tag === 'li' && 'list-none', className)}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
-    </div>
+    </Tag>
   );
 }

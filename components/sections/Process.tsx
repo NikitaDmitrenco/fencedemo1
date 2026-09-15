@@ -25,8 +25,8 @@ export function Process() {
         />
 
         {site.process.map((step, i) => (
-          <Reveal key={step.title} delay={i * 60}>
-            <li className="relative flex gap-4 lg:block">
+          <Reveal key={step.title} as="li" delay={i * 60} className="relative">
+            <div className="flex gap-4 lg:block">
               <span className="relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] font-bold">
                 {i + 1}
               </span>
@@ -46,7 +46,7 @@ export function Process() {
                   {step.duration}
                 </p>
               </div>
-            </li>
+            </div>
           </Reveal>
         ))}
       </ol>

@@ -12,7 +12,7 @@ export function Card({
   className,
   children,
 }: {
-  as?: 'div' | 'article' | 'li';
+  as?: 'div' | 'article';
   id?: string;
   /** Приподнимается при наведении — для карточек, по которым кликают. */
   interactive?: boolean;

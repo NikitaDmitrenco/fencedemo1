@@ -17,8 +17,8 @@ export function Durability() {
     >
       <ul className="grid gap-5 lg:grid-cols-2">
         {site.durability.map((factor, i) => (
-          <Reveal key={factor.title} delay={i * 50} className="h-full">
-            <Card as="li" className="flex h-full list-none flex-col p-6">
+          <Reveal key={factor.title} as="li" delay={i * 50} className="h-full">
+            <Card className="flex h-full flex-col p-6">
               <h3 className="text-lg font-bold">{factor.title}</h3>
 
               <dl className="mt-4 space-y-3 text-[0.9375rem]">

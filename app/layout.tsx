@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { site } from '@/content/site.config';
 import { siteUrl } from '@/lib/site-url';
+import { Analytics } from '@/components/layout/Analytics';
+import { CookieNotice } from '@/components/layout/CookieNotice';
 import './globals.css';
 
 // Self-hosted шрифт: без запросов к стороннему CDN и без скачка вёрстки.
@@ -11,18 +13,30 @@ const manrope = Manrope({
   variable: '--font-manrope',
 });
 
+const title = `${site.hero.title} — ${site.company.name}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${site.hero.title} — ${site.company.name}`,
+  title,
   description: site.hero.subtitle,
   openGraph: {
-    title: `${site.hero.title} — ${site.company.name}`,
+    title,
     description: site.hero.subtitle,
     type: 'website',
     locale: 'ru_RU',
     siteName: site.company.name,
+    // Превью в мессенджерах — первое, что видит получатель ссылки.
+    images: [{ url: '/media/demo/og.jpg', width: 1200, height: 630, alt: site.hero.title }],
   },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description: site.hero.subtitle,
+    images: ['/media/demo/og.jpg'],
+  },
+  // Демо закрыто от индексации: сайт с вымышленными названием, телефоном и
+  // реквизитами не должен попадать в выдачу как настоящая компания.
+  robots: site.isDemo ? { index: false, follow: false } : { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -46,7 +60,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <noscript>
           <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
+
         {children}
+
+        <CookieNotice />
+        <Analytics />
       </body>
     </html>
   );

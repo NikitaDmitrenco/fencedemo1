@@ -24,8 +24,8 @@ export function Estimate() {
       <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-14">
         <ol className="divide-y divide-white/12 border-y border-white/12">
           {site.estimate.map((row, i) => (
-            <Reveal key={row.item} delay={i * 35}>
-              <li className="flex gap-4 py-4">
+            <Reveal key={row.item} as="li" delay={i * 35}>
+              <div className="flex gap-4 py-4">
                 <span className="w-6 shrink-0 pt-0.5 text-sm font-bold text-[var(--accent)]">
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -33,7 +33,7 @@ export function Estimate() {
                   <span className="block font-bold text-white">{row.item}</span>
                   <span className="mt-1 block text-[0.9375rem] text-white/60">{row.note}</span>
                 </span>
-              </li>
+              </div>
             </Reveal>
           ))}
         </ol>
