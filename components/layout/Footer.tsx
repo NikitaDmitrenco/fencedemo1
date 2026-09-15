@@ -23,17 +23,17 @@ export function Footer() {
     // Нижний отступ на мобильном учитывает панель «Позвонить | Рассчитать»:
     // она зафиксирована поверх страницы и без запаса накрывала бы последние
     // строки с реквизитами.
-    <footer className="bg-[var(--color-ink)] pt-16 pb-28 text-white/70 lg:pt-20 lg:pb-12">
+    <footer className="border-t border-[var(--color-steel-line)] bg-[var(--color-ink)] pt-16 pb-28 text-white/70 lg:pt-20 lg:pb-12">
       <Container>
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="text-lg font-bold text-white">{company.name}</p>
+            <p className="technical-label text-[var(--accent)]">{company.name}</p>
             <p className="mt-3 text-sm">{company.geo}</p>
             <p className="mt-1 text-sm">{company.workHours}</p>
           </div>
 
           <div>
-            <p className="text-sm font-bold text-white">Связаться</p>
+            <p className="technical-label text-white/45">Связаться</p>
 
             <a
               href={`tel:${company.phone}`}
@@ -63,7 +63,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-bold text-white">Разделы</p>
+            <p className="technical-label text-white/45">Разделы</p>
             <ul className="mt-3 space-y-1.5 text-sm">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
@@ -76,7 +76,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-bold text-white">Документы</p>
+            <p className="technical-label text-white/45">Документы</p>
             <ul className="mt-3 space-y-1.5 text-sm">
               <li>
                 <Link

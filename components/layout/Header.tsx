@@ -39,7 +39,7 @@ export function Header() {
         className={clsx(
           'fixed inset-x-0 top-0 z-50 transition-colors duration-300 ease-[var(--ease-out-soft)]',
           scrolled
-            ? 'border-b border-[var(--color-steel-line)] bg-[var(--color-paper)]/92 backdrop-blur-md'
+            ? 'border-b border-[var(--color-steel-line)] bg-[var(--color-ink)]'
             : 'border-b border-transparent',
         )}
         style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
@@ -47,10 +47,7 @@ export function Header() {
         <Container className="flex h-16 items-center justify-between gap-6">
           <a
             href="#top"
-            className={clsx(
-              'text-base font-bold tracking-tight transition-colors',
-              scrolled ? 'text-[var(--color-ink)]' : 'text-white',
-            )}
+            className={clsx('text-base font-bold tracking-tight transition-colors', 'text-white')}
           >
             {site.company.name}
           </a>
@@ -62,9 +59,7 @@ export function Header() {
                 href={link.href}
                 className={clsx(
                   'text-[0.9375rem] font-medium transition-colors',
-                  scrolled
-                    ? 'text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]'
-                    : 'text-white/80 hover:text-white',
+                  scrolled ? 'text-white/60 hover:text-white' : 'text-white/80 hover:text-white',
                 )}
               >
                 {link.label}
@@ -77,7 +72,7 @@ export function Header() {
               href={`tel:${site.company.phone}`}
               className={clsx(
                 'hidden text-[0.9375rem] font-bold whitespace-nowrap transition-colors sm:block',
-                scrolled ? 'text-[var(--color-ink)]' : 'text-white',
+                'text-white',
               )}
             >
               {formatPhone(site.company.phone)}
@@ -100,7 +95,7 @@ export function Header() {
               aria-expanded={menuOpen}
               className={clsx(
                 '-mr-2 flex size-11 items-center justify-center rounded-[var(--radius-control)] transition-colors lg:hidden',
-                scrolled ? 'text-[var(--color-ink)]' : 'text-white',
+                'text-white',
               )}
             >
               <svg

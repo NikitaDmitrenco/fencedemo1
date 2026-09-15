@@ -29,8 +29,8 @@ export function OptionCard({
         'transition-[border-color,background-color,transform] duration-150 ease-[var(--ease-out-soft)]',
         'hover:-translate-y-0.5',
         selected
-          ? 'border-[var(--accent)] bg-[var(--accent)]/8'
-          : 'border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] hover:border-[var(--color-steel)]',
+          ? 'border-[var(--accent)] bg-[var(--accent)]/10'
+          : 'border-[var(--color-steel-line)] bg-transparent hover:border-[var(--color-steel)]',
       )}
     >
       {image && (
@@ -47,7 +47,7 @@ export function OptionCard({
       <span
         aria-hidden="true"
         className={clsx(
-          'flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors',
+          'flex size-6 shrink-0 items-center justify-center rounded-none border transition-colors',
           selected
             ? 'border-[var(--accent)] bg-[var(--accent)]'
             : 'border-[var(--color-steel-line)]',

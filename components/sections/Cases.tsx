@@ -29,7 +29,7 @@ function Gallery({ item }: { item: ProjectCase }) {
       {item.photos.map((photo, i) => (
         <div
           key={photo}
-          className="relative aspect-3/2 w-[85%] shrink-0 snap-start overflow-hidden rounded-[10px] bg-[var(--color-ink)] sm:w-[70%]"
+          className="relative aspect-3/2 w-[85%] shrink-0 snap-start overflow-hidden rounded-none bg-[var(--color-ink)] sm:w-[70%]"
         >
           <Image
             src={photo}
@@ -53,14 +53,19 @@ export function Cases() {
       title="Объекты с параметрами и ценой"
       lead="У каждого объекта указаны длина, высота, тип ворот, срок и итоговая стоимость — чтобы можно было прикинуть свой участок, а не гадать по фотографиям."
     >
-      <ul className="grid gap-6 lg:grid-cols-2">
+      <ul className="grid gap-px bg-[var(--color-steel-line)] lg:grid-cols-2">
         {site.cases.map((item, i) => (
           <Reveal key={item.title} as="li" delay={i * 60} className="h-full">
-            <Card className="flex h-full flex-col p-4 sm:p-5">
+            <Card className="flex h-full flex-col border-0 p-4 sm:p-6">
               <Gallery item={item} />
 
               <div className="mt-5 flex flex-1 flex-col">
-                <h3 className="text-lg font-bold">{item.title}</h3>
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="text-2xl font-bold tracking-tight">{item.title}</h3>
+                  <span className="technical-label text-[var(--accent)]">
+                    CASE/{String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
                 <p className="mt-1 text-[0.9375rem] text-[var(--color-ink-soft)]">{item.type}</p>
 
                 <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 text-[0.9375rem] sm:grid-cols-3">

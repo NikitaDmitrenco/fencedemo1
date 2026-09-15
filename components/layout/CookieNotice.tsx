@@ -55,10 +55,10 @@ export function CookieNotice() {
       aria-label="Уведомление об использовании cookie"
       // На мобильном поднят над панелью «Позвонить | Рассчитать»,
       // иначе две полосы наложились бы друг на друга.
-      className="fixed inset-x-3 bottom-21 z-50 mx-auto max-w-2xl rounded-[var(--radius-card)] border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-4 shadow-[0_12px_32px_-12px_rgba(20,24,27,0.35)] sm:inset-x-4 lg:bottom-4"
+      className="fixed inset-x-3 bottom-21 z-50 mx-auto max-w-2xl rounded-[var(--radius-card)] border border-[var(--color-steel-line)] bg-[var(--color-ink-raised)] p-4 sm:inset-x-4 lg:bottom-4"
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <p className="flex-1 text-sm text-[var(--color-ink-soft)]">
+        <p className="flex-1 text-sm text-white/65">
           Сайт использует cookie для работы форм и сбора обезличенной статистики. Подробности — в{' '}
           <Link
             href={site.legal.privacyUrl as Route}

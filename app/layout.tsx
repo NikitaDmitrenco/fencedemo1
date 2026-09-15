@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Manrope } from 'next/font/google';
+import { IBM_Plex_Mono, Manrope } from 'next/font/google';
 import { site } from '@/content/site.config';
 import { siteUrl } from '@/lib/site-url';
 import { Analytics } from '@/components/layout/Analytics';
@@ -11,6 +11,13 @@ const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
   display: 'swap',
   variable: '--font-manrope',
+});
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-mono',
 });
 
 const title = `${site.hero.title} — ${site.company.name}`;
@@ -40,7 +47,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#14181b',
+  themeColor: '#0b0e10',
   // viewport-fit нужен sticky-панели «Позвонить | Рассчитать» на iPhone.
   viewportFit: 'cover',
   width: 'device-width',
@@ -51,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="ru"
-      className={manrope.variable}
+      className={`${manrope.variable} ${mono.variable}`}
       // Единственная точка, где акцентный цвет клиента попадает в CSS.
       style={{ '--accent': site.brand.accent } as React.CSSProperties}
     >

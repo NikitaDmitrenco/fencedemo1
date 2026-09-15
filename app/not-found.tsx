@@ -4,9 +4,7 @@ import { site, formatPhone } from '@/content/site.config';
 export default function NotFound() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-xl flex-col justify-center px-6 py-16">
-      <p className="text-sm font-semibold tracking-[0.18em] text-[var(--color-steel)] uppercase">
-        Ошибка 404
-      </p>
+      <p className="technical-label text-[var(--accent)]">Ошибка 404</p>
 
       <h1 className="h-section mt-4">Такой страницы нет</h1>
 

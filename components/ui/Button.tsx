@@ -11,11 +11,11 @@ export type ButtonSize = 'md' | 'lg';
  */
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--accent)] text-[var(--color-accent-ink)] font-bold shadow-[0_1px_2px_rgba(20,24,27,0.16)] hover:brightness-[1.04]',
+    'bg-[var(--accent)] text-[var(--color-accent-ink)] font-bold hover:bg-[var(--color-accent-strong)]',
   outline:
-    'border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] text-[var(--color-ink)] font-semibold hover:border-[var(--color-steel)]',
+    'border border-[var(--color-steel-line)] bg-transparent text-white font-semibold hover:border-[var(--color-steel)]',
   ghost:
-    'border border-white/30 bg-white/10 text-white font-semibold backdrop-blur-sm hover:bg-white/20',
+    'border border-white/35 bg-transparent text-white font-semibold hover:border-white hover:bg-white/8',
 };
 
 const SIZES: Record<ButtonSize, string> = {
@@ -31,8 +31,8 @@ export function buttonClass(
 ): string {
   return clsx(
     'inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)]',
-    'transition-[transform,background-color,border-color,filter] duration-150 ease-[var(--ease-out-soft)]',
-    'hover:-translate-y-0.5 active:translate-y-0',
+    'transition-[transform,background-color,border-color,filter] duration-200 ease-[var(--ease-out-soft)]',
+    'hover:-translate-y-px active:translate-y-0',
     'disabled:pointer-events-none disabled:opacity-55',
     VARIANTS[variant],
     SIZES[size],

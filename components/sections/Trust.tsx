@@ -45,7 +45,7 @@ export function Trust() {
               // перестановкой элементов в разметке.
               <Reveal key={fact.label} delay={i * 60} className="flex flex-col-reverse">
                 <dt className="mt-1.5 text-[0.9375rem] text-white/60">{fact.label}</dt>
-                <dd className="text-4xl font-bold text-white lg:text-5xl">
+                <dd className="text-5xl font-bold tracking-[-0.06em] text-white lg:text-7xl">
                   {factText(fact.value)}
                 </dd>
               </Reveal>
@@ -93,9 +93,9 @@ export function Trust() {
 
         {trust.owner && (
           <Reveal delay={120}>
-            <figure className="rounded-[var(--radius-card)] border border-white/14 bg-white/6 p-6 lg:p-8">
+            <figure className="border-t border-white/20 pt-6 lg:pt-8">
               {trust.owner.photo ? (
-                <div className="relative mb-6 aspect-4/5 w-full max-w-64 overflow-hidden rounded-[var(--radius-card)]">
+                <div className="relative mb-6 aspect-4/5 w-full max-w-64 overflow-hidden">
                   <Image
                     src={trust.owner.photo}
                     alt={trust.owner.name}
@@ -108,7 +108,7 @@ export function Trust() {
                 // Заглушка честно называет себя: живое фото владельца —
                 // один из самых сильных элементов на таком сайте, и его
                 // отсутствие лучше обозначить, чем маскировать стоком.
-                <div className="mb-6 flex aspect-4/5 w-full max-w-64 items-center justify-center rounded-[var(--radius-card)] border border-dashed border-white/25 p-6 text-center text-sm text-white/45">
+                <div className="mb-6 flex aspect-4/5 w-full max-w-64 items-center justify-center border border-dashed border-white/25 p-6 text-center text-sm text-white/45">
                   Здесь будет фотография владельца или команды
                 </div>
               )}

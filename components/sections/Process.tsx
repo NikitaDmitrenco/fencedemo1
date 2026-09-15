@@ -27,8 +27,8 @@ export function Process() {
         {site.process.map((step, i) => (
           <Reveal key={step.title} as="li" delay={i * 60} className="relative">
             <div className="flex gap-4 lg:block">
-              <span className="relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] font-bold">
-                {i + 1}
+              <span className="technical-label relative z-10 flex size-10 shrink-0 items-center justify-center rounded-none border border-[var(--color-steel-line)] bg-[var(--color-ink-raised)] text-[var(--accent)]">
+                {String(i + 1).padStart(2, '0')}
               </span>
 
               {/* Вертикальная линия для мобильного таймлайна. */}
@@ -42,9 +42,7 @@ export function Process() {
               <div className="pb-2 lg:mt-4 lg:pb-0">
                 <h3 className="font-bold">{step.title}</h3>
                 <p className="mt-1 text-[0.9375rem] text-[var(--color-ink-soft)]">{step.text}</p>
-                <p className="mt-2 text-sm font-semibold text-[var(--accent-ink,var(--color-ink))]">
-                  {step.duration}
-                </p>
+                <p className="mt-2 text-sm font-semibold text-[var(--accent)]">{step.duration}</p>
               </div>
             </div>
           </Reveal>

@@ -38,7 +38,7 @@ export function StickyCTA() {
     <div
       className={clsx(
         'fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-steel-line)]',
-        'bg-[var(--color-paper)]/95 backdrop-blur-md lg:hidden',
+        'bg-[var(--color-ink)] lg:hidden',
         'transition-transform duration-300 ease-[var(--ease-out-soft)]',
         visible ? 'translate-y-0' : 'translate-y-full',
       )}
@@ -50,7 +50,7 @@ export function StickyCTA() {
       <div className="flex gap-3 px-4 pt-2.5">
         <a
           href={`tel:${site.company.phone}`}
-          className="inline-flex min-h-13 flex-1 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] font-semibold"
+          className="inline-flex min-h-13 flex-1 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-steel-line)] text-white font-semibold"
         >
           <svg
             width="18"

@@ -30,14 +30,14 @@ export function Reviews() {
       title="Что пишут заказчики"
       lead="Отзывы с карт — каждый со ссылкой на оригинал, который можно открыть и проверить."
     >
-      <ul className="grid gap-5 lg:grid-cols-3">
+      <ul className="grid gap-px bg-[var(--color-steel-line)] lg:grid-cols-3">
         {site.reviews.map((review, i) => (
           <Reveal key={review.url + review.author} as="li" delay={i * 60} className="h-full">
-            <Card className="flex h-full flex-col p-6">
+            <Card className="flex h-full flex-col border-0 p-6">
               <div className="flex items-center gap-3">
                 <span
                   aria-hidden="true"
-                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-paper)] font-bold"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-none bg-[var(--accent)] font-bold text-[var(--color-accent-ink)]"
                 >
                   {review.author.trim().charAt(0)}
                 </span>

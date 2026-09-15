@@ -1,5 +1,5 @@
 import { site } from '@/content/site.config';
-import { Accordion, AccordionItem, Card, Reveal, Section } from '@/components/ui';
+import { Accordion, AccordionItem, Reveal, Section } from '@/components/ui';
 
 /**
  * Блок 10. Снять оставшиеся коммерческие возражения.
@@ -29,15 +29,15 @@ export function Faq() {
       title="Коротко о главном"
       lead="Если вашего вопроса здесь нет — позвоните, ответим без лишних формальностей."
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="ml-auto max-w-4xl">
         <Reveal>
-          <Card className="px-5 py-2 sm:px-7">
+          <div>
             <Accordion>
               {site.faq.map((item) => (
                 <AccordionItem key={item.q} question={item.q} answer={item.a} />
               ))}
             </Accordion>
-          </Card>
+          </div>
         </Reveal>
       </div>
 

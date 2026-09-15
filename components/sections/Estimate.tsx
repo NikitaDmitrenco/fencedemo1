@@ -21,12 +21,12 @@ export function Estimate() {
       title="Из чего складывается смета"
       lead="Ниже — все статьи расходов, которые влияют на итоговую сумму. Если какой-то из них нет в вашем расчёте, значит она вам не нужна."
     >
-      <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-14">
-        <ol className="divide-y divide-white/12 border-y border-white/12">
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+        <ol className="divide-y divide-white/12 border-y border-white/12 lg:col-span-8">
           {site.estimate.map((row, i) => (
             <Reveal key={row.item} as="li" delay={i * 35}>
               <div className="flex gap-4 py-4">
-                <span className="w-6 shrink-0 pt-0.5 text-sm font-bold text-[var(--accent)]">
+                <span className="technical-label w-8 shrink-0 pt-1 text-[var(--accent)]">
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span>
@@ -38,8 +38,8 @@ export function Estimate() {
           ))}
         </ol>
 
-        <Reveal>
-          <div className="rounded-[var(--radius-card)] border border-white/14 bg-white/6 p-6 lg:sticky lg:top-24">
+        <Reveal className="lg:col-span-4">
+          <div className="border-l-2 border-[var(--accent)] bg-[#151b1e] p-6 lg:sticky lg:top-24">
             <p className="text-lg font-bold text-white">Точная цена — после замера</p>
 
             <p className="mt-3 text-[0.9375rem] text-white/70">

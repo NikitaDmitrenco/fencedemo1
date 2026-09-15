@@ -73,7 +73,7 @@ export function ShortForm() {
 
   if (status === 'done') {
     return (
-      <div className="rounded-[var(--radius-card)] border border-white/14 bg-white/6 p-8 text-center">
+      <div className="border border-white/14 bg-[#151b1e] p-8 text-center">
         <p className="text-xl font-bold text-white">Заявка принята</p>
         <p className="measure mx-auto mt-2 text-white/70">
           Перезвоним в рабочее время и уточним детали. Если нужно срочно — звоните сами.
@@ -83,10 +83,7 @@ export function ShortForm() {
   }
 
   return (
-    <form
-      onSubmit={submit}
-      className="rounded-[var(--radius-card)] border border-white/14 bg-white/6 p-6 lg:p-8"
-    >
+    <form onSubmit={submit} className="border border-white/14 bg-[#151b1e] p-6 lg:p-8">
       <p className="text-lg font-bold text-white">Оставьте заявку</p>
       <p className="mt-1.5 text-[0.9375rem] text-white/65">
         Перезвоним, уточним детали и посчитаем точную стоимость.
@@ -99,7 +96,7 @@ export function ShortForm() {
             value={task}
             onChange={(e) => setTask(e.target.value)}
             placeholder="Забор из профнастила и откатные ворота"
-            className="!bg-white/8 !text-white !border-white/20 placeholder:!text-white/40"
+            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
@@ -114,7 +111,7 @@ export function ShortForm() {
             onChange={(e) => setLength(e.target.value)}
             placeholder="например, 40"
             aria-describedby="short-length-hint"
-            className="!bg-white/8 !text-white !border-white/20 placeholder:!text-white/40"
+            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
@@ -125,7 +122,7 @@ export function ShortForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Имя"
-            className="!bg-white/8 !text-white !border-white/20 placeholder:!text-white/40"
+            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
@@ -138,13 +135,13 @@ export function ShortForm() {
             value={phone}
             onChange={(e) => setPhone(maskPhone(e.target.value))}
             placeholder="+7 (___) ___-__-__"
-            className="!bg-white/8 !text-white !border-white/20 placeholder:!text-white/40"
+            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
         <div>
           <p className="mb-1.5 text-sm font-semibold text-white">Как удобнее связаться</p>
-          <div className="grid grid-cols-3 gap-2.5 [&_button]:!border-white/20 [&_button]:!bg-white/8 [&_button]:!text-white">
+          <div className="grid grid-cols-3 gap-2.5 [&_button]:!border-white/20 [&_button]:!bg-transparent [&_button]:!text-white">
             {MESSENGERS.map((option) => (
               <OptionCard
                 key={option.value}

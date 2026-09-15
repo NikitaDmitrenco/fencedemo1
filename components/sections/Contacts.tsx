@@ -28,8 +28,8 @@ export function Contacts() {
       title="Посчитаем ваш объект"
       lead="Оставьте заявку или позвоните — ответим на вопросы и согласуем замер в удобное время."
     >
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <Reveal>
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+        <Reveal className="lg:col-span-5">
           <div>
             <a
               href={`tel:${company.phone}`}
@@ -75,7 +75,7 @@ export function Contacts() {
           </div>
         </Reveal>
 
-        <Reveal delay={100}>
+        <Reveal delay={100} className="lg:col-span-6 lg:col-start-7">
           <ShortForm />
         </Reveal>
       </div>

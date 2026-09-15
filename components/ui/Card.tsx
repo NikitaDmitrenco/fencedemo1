@@ -25,7 +25,7 @@ export function Card({
       className={clsx(
         'rounded-[var(--radius-card)] border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)]',
         interactive &&
-          'transition-[transform,border-color,box-shadow] duration-150 ease-[var(--ease-out-soft)] hover:-translate-y-0.5 hover:border-[var(--color-steel)] hover:shadow-[0_8px_24px_-12px_rgba(20,24,27,0.25)]',
+          'transition-[transform,border-color,background-color] duration-200 ease-[var(--ease-out-soft)] hover:-translate-y-px hover:border-[var(--color-steel)] hover:bg-[#1b2326]',
         className,
       )}
     >

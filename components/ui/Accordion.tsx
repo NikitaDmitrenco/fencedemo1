@@ -13,7 +13,14 @@ export function Accordion({
   children: React.ReactNode;
 }) {
   return (
-    <div className={clsx('divide-y divide-[var(--color-steel-line)]', className)}>{children}</div>
+    <div
+      className={clsx(
+        'divide-y divide-[var(--color-steel-line)] border-y border-[var(--color-steel-line)]',
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -23,7 +30,7 @@ export function AccordionItem({ question, answer }: { question: string; answer: 
       <summary
         className={clsx(
           'flex cursor-pointer list-none items-start justify-between gap-4 py-4',
-          'text-left font-semibold [&::-webkit-details-marker]:hidden',
+          'text-left text-lg font-semibold [&::-webkit-details-marker]:hidden',
         )}
       >
         <span className="text-[1.0625rem]">{question}</span>
@@ -45,7 +52,7 @@ export function AccordionItem({ question, answer }: { question: string; answer: 
         </span>
       </summary>
 
-      <p className="measure pb-4 text-[var(--color-ink-soft)]">{answer}</p>
+      <p className="measure pb-5 text-[var(--color-ink-soft)]">{answer}</p>
     </details>
   );
 }

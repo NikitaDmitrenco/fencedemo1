@@ -12,12 +12,21 @@ export function Calculator() {
   return (
     <Section
       id="calc"
-      eyebrow="Расчёт"
+      eyebrow="Первый шаг"
       title="Узнайте стоимость своего участка"
       lead="Пять коротких вопросов — покажем диапазон цены сразу, до того как спросим телефон. Занимает около минуты."
     >
-      <div className="mx-auto max-w-2xl">
-        <Reveal>
+      <div className="grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-8">
+        <Reveal className="border-l border-[var(--accent)] pl-5 lg:col-span-3 lg:sticky lg:top-28">
+          <p className="technical-label text-[var(--accent)]">01 / Estimate</p>
+          <p className="mt-4 text-xl font-semibold leading-snug">
+            Сначала диапазон. Детали — после замера.
+          </p>
+          <p className="mt-4 text-sm text-[var(--color-ink-soft)]">
+            Расчёт остаётся предварительным: рельеф и грунт оцениваются на объекте.
+          </p>
+        </Reveal>
+        <Reveal className="lg:col-span-8 lg:col-start-5">
           <Quiz />
         </Reveal>
       </div>

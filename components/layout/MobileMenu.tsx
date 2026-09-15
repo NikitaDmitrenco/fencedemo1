@@ -77,7 +77,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
         aria-modal="true"
         aria-label="Меню"
         className={clsx(
-          'absolute inset-x-0 top-0 bg-[var(--color-paper)] shadow-[0_18px_40px_-20px_rgba(11,15,18,0.6)]',
+          'absolute inset-x-0 top-0 border-b border-[var(--color-steel-line)] bg-[var(--color-ink)] text-white',
           'transition-transform duration-300 ease-[var(--ease-out-soft)]',
           open ? 'translate-y-0' : '-translate-y-full',
         )}
@@ -116,7 +116,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
                   <a
                     href={link.href}
                     onClick={onClose}
-                    className="flex min-h-14 items-center text-lg font-semibold"
+                    className="flex min-h-14 items-center text-2xl font-semibold tracking-tight"
                   >
                     {link.label}
                   </a>
@@ -140,7 +140,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
             {formatPhone(site.company.phone)}
           </a>
 
-          <p className="mt-1 text-sm text-[var(--color-ink-muted)]">{site.company.workHours}</p>
+          <p className="mt-1 text-sm text-white/50">{site.company.workHours}</p>
 
           {messengers.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2.5">
@@ -150,7 +150,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
                   href={m.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center rounded-[var(--radius-control)] border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] px-4 font-semibold"
+                  className="inline-flex min-h-11 items-center rounded-[var(--radius-control)] border border-[var(--color-steel-line)] px-4 font-semibold"
                 >
                   {m.label}
                 </a>

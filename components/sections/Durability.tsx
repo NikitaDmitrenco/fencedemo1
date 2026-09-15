@@ -1,13 +1,6 @@
 import { site } from '@/content/site.config';
-import { Card, Reveal, Section } from '@/components/ui';
+import { Reveal, Section } from '@/components/ui';
 
-/**
- * Блок 6. Увести сравнение от «у кого дешевле метр» к качеству исполнения.
- *
- * Каждый фактор подан как «как экономят → что из этого выйдет → как правильно».
- * Просто перечислить характеристики мало: посетитель не инженер и сам не
- * поймёт, почему толщина металла 0,35 мм — это проблема, а не экономия.
- */
 export function Durability() {
   return (
     <Section
@@ -15,35 +8,34 @@ export function Durability() {
       title="Что влияет на срок службы"
       lead="Разница в цене между подрядчиками почти всегда объясняется этими пятью пунктами. Их стоит уточнять у всех, к кому вы обращаетесь — не только у нас."
     >
-      <ul className="grid gap-5 lg:grid-cols-2">
+      <ul className="border-y border-[var(--color-steel-line)]">
         {site.durability.map((factor, i) => (
-          <Reveal key={factor.title} as="li" delay={i * 50} className="h-full">
-            <Card className="flex h-full flex-col p-6">
-              <h3 className="text-lg font-bold">{factor.title}</h3>
-
-              <dl className="mt-4 space-y-3 text-[0.9375rem]">
+          <Reveal
+            key={factor.title}
+            as="li"
+            delay={i * 50}
+            className="border-b border-[var(--color-steel-line)] last:border-0"
+          >
+            <div className="grid gap-5 py-7 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-3">
+                <span className="technical-label text-[var(--accent)]">0{i + 1}</span>
+                <h3 className="mt-3 text-2xl font-bold tracking-tight">{factor.title}</h3>
+              </div>
+              <dl className="grid gap-5 text-[0.9375rem] sm:grid-cols-3 lg:col-span-9">
                 <div>
-                  <dt className="text-xs font-bold tracking-wider text-[var(--color-ink-muted)] uppercase">
-                    Как экономят
-                  </dt>
-                  <dd className="mt-1 text-[var(--color-ink-soft)]">{factor.cheap}</dd>
+                  <dt className="technical-label text-[var(--color-ink-muted)]">Как экономят</dt>
+                  <dd className="mt-2 text-[var(--color-ink-soft)]">{factor.cheap}</dd>
                 </div>
-
                 <div>
-                  <dt className="text-xs font-bold tracking-wider text-[var(--color-warn)] uppercase">
-                    Чем это кончается
-                  </dt>
-                  <dd className="mt-1 text-[var(--color-ink-soft)]">{factor.consequence}</dd>
+                  <dt className="technical-label text-[var(--color-warn)]">Чем это кончается</dt>
+                  <dd className="mt-2 text-[var(--color-ink-soft)]">{factor.consequence}</dd>
                 </div>
-
-                <div className="border-t border-[var(--color-steel-line)] pt-3">
-                  <dt className="text-xs font-bold tracking-wider text-[var(--color-ink)] uppercase">
-                    Как делаем мы
-                  </dt>
-                  <dd className="mt-1 font-medium">{factor.right}</dd>
+                <div>
+                  <dt className="technical-label text-[var(--accent)]">Как делаем мы</dt>
+                  <dd className="mt-2 font-medium text-white">{factor.right}</dd>
                 </div>
               </dl>
-            </Card>
+            </div>
           </Reveal>
         ))}
       </ul>

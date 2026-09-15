@@ -5,8 +5,8 @@ import { clsx } from '@/lib/clsx';
 export type SectionTone = 'paper' | 'raised' | 'ink';
 
 const TONES: Record<SectionTone, string> = {
-  paper: 'bg-[var(--color-paper)] text-[var(--color-ink)]',
-  raised: 'bg-[var(--color-paper-raised)] text-[var(--color-ink)]',
+  paper: 'bg-[var(--color-paper)] text-white',
+  raised: 'bg-[var(--color-ink-raised)] text-white',
   // Тёмная секция — способ разбить длинную страницу без лишних рамок и теней.
   ink: 'bg-[var(--color-ink)] text-white',
 };
@@ -39,37 +39,38 @@ export function Section({
     <section
       id={id}
       className={clsx(
-        'py-(--spacing-section) lg:py-(--spacing-section-lg)',
+        'relative overflow-hidden py-(--spacing-section) lg:py-(--spacing-section-lg)',
         TONES[tone],
         className,
       )}
     >
       <Container>
         {(eyebrow || title || lead) && (
-          <Reveal className="mb-10 lg:mb-14">
+          <Reveal className="mb-12 grid gap-5 border-t border-[var(--color-steel-line)] pt-5 lg:mb-20 lg:grid-cols-12 lg:gap-8">
             {eyebrow && (
               <p
                 className={clsx(
-                  'text-[0.8125rem] font-bold tracking-[0.18em] uppercase',
+                  'technical-label lg:col-span-3',
                   isInk ? 'text-[var(--accent)]' : 'text-[var(--color-steel)]',
                 )}
               >
+                {'// '}
                 {eyebrow}
               </p>
             )}
-
-            {title && <h2 className="h-section mt-3 text-balance">{title}</h2>}
-
-            {lead && (
-              <p
-                className={clsx(
-                  'measure mt-4 text-lg',
-                  isInk ? 'text-white/70' : 'text-[var(--color-ink-soft)]',
-                )}
-              >
-                {lead}
-              </p>
-            )}
+            <div className="lg:col-span-9">
+              {title && <h2 className="h-section max-w-5xl text-balance">{title}</h2>}
+              {lead && (
+                <p
+                  className={clsx(
+                    'measure mt-8 text-base sm:text-lg',
+                    isInk ? 'text-white/65' : 'text-[var(--color-ink-soft)]',
+                  )}
+                >
+                  {lead}
+                </p>
+              )}
+            </div>
           </Reveal>
         )}
 

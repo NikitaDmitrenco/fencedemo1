@@ -2,7 +2,7 @@ import { clsx } from '@/lib/clsx';
 
 const CONTROL = clsx(
   'w-full rounded-[var(--radius-control)] border border-[var(--color-steel-line)]',
-  'bg-[var(--color-paper-raised)] px-4 py-3.5 text-base text-[var(--color-ink)]',
+  'bg-transparent px-4 py-3.5 text-base text-white',
   'placeholder:text-[var(--color-ink-muted)]',
   'transition-colors duration-150 focus:border-[var(--accent)] focus:outline-none',
   // Шрифт не меньше 16 px: иначе Safari на iOS зумит страницу при фокусе.
@@ -33,7 +33,7 @@ export function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold">
+      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-white">
         {label}
         {required && (
           <span className="text-[var(--color-warn)]" aria-hidden="true">

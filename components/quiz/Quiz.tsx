@@ -119,8 +119,8 @@ export function Quiz() {
 
   if (status === 'done') {
     return (
-      <div className="rounded-[var(--radius-card)] border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-8 text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[var(--accent)]">
+      <div className="border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-8 text-center">
+        <div className="mx-auto flex size-14 items-center justify-center rounded-none bg-[var(--accent)]">
           <svg
             width="26"
             height="26"
@@ -155,7 +155,7 @@ export function Quiz() {
   const current = visibleStepIndex(state);
 
   return (
-    <div className="rounded-[var(--radius-card)] border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-5 sm:p-7">
+    <div className="border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-5 sm:p-8">
       {/* Прогресс: человек должен видеть, что вопросов мало и они кончаются. */}
       <div className="flex items-center gap-3">
         <div className="flex flex-1 gap-1.5">
@@ -163,7 +163,7 @@ export function Quiz() {
             <span
               key={i}
               className={clsx(
-                'h-1 flex-1 rounded-full transition-colors duration-300',
+                'h-px flex-1 transition-colors duration-300',
                 i <= current ? 'bg-[var(--accent)]' : 'bg-[var(--color-steel-line)]',
               )}
             />
