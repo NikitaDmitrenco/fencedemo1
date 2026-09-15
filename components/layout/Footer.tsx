@@ -20,7 +20,10 @@ export function Footer() {
   ].filter(Boolean) as Array<{ label: string; href: string }>;
 
   return (
-    <footer className="bg-[var(--color-ink)] pt-16 pb-12 text-white/70 lg:pt-20">
+    // Нижний отступ на мобильном учитывает панель «Позвонить | Рассчитать»:
+    // она зафиксирована поверх страницы и без запаса накрывала бы последние
+    // строки с реквизитами.
+    <footer className="bg-[var(--color-ink)] pt-16 pb-28 text-white/70 lg:pt-20 lg:pb-12">
       <Container>
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
