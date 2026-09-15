@@ -1,7 +1,7 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { StickyCTA } from '@/components/layout/StickyCTA';
-import { Hero, Catalog, Cases, Estimate } from '@/components/sections';
+import { Hero, Calculator, Catalog, Cases, Estimate } from '@/components/sections';
 import { Section } from '@/components/ui';
 
 /**
@@ -11,7 +11,7 @@ import { Section } from '@/components/ui';
  * Блоки собраны так, что перестановка под конкретного клиента — это
  * перестановка строк здесь, а не правка компонентов.
  *
- * Готово: 1, 3, 4, 5. Остальные подключаются на Э3 и Э4.
+ * Готово: 1, 2, 3, 4, 5. Блоки 6–11 подключаются на Э4.
  */
 export default function Home() {
   return (
@@ -27,12 +27,7 @@ export default function Home() {
         {/* Ниже этого маркера показывается нижняя панель с CTA. */}
         <div id="sticky-sentinel" aria-hidden="true" className="h-px w-px" />
 
-        <Placeholder
-          id="calc"
-          stage="Э3"
-          title="Быстрый расчёт"
-          text="Пять коротких шагов: тип ограждения, длина, высота, ворота и контакт. Предварительный диапазон стоимости считается на месте и показывается до того, как мы спросим телефон."
-        />
+        <Calculator />
 
         <Catalog />
         <Cases />
