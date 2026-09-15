@@ -97,7 +97,14 @@ export function Textarea({
   );
 }
 
-/** Чекбокс согласия на обработку ПД. По 152-ФЗ не может быть предустановленным. */
+/**
+ * Чекбокс согласия на обработку ПД. По 152-ФЗ не может быть предустановленным.
+ *
+ * Собственная отрисовка вместо нативной: нативный чекбокс в невыбранном
+ * состоянии заливается белым, и на тёмной секции это выглядит как дырка
+ * в вёрстке. Рамка берёт currentColor, поэтому контрол одинаково уместен
+ * и на светлом, и на тёмном фоне.
+ */
 export function Consent({
   id,
   checked,
@@ -114,14 +121,34 @@ export function Consent({
       htmlFor={id}
       className="flex cursor-pointer items-start gap-3 text-sm text-[var(--color-ink-soft)]"
     >
-      <input
-        id={id}
-        type="checkbox"
-        required
-        checked={checked}
-        onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
-        className="mt-0.5 size-5 shrink-0 accent-[var(--accent)]"
-      />
+      <span className="relative mt-0.5 inline-flex size-5 shrink-0">
+        <input
+          id={id}
+          type="checkbox"
+          required
+          checked={checked}
+          onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
+          className={clsx(
+            'peer size-5 cursor-pointer appearance-none rounded-[5px] border-2 border-current/35 bg-transparent',
+            'transition-colors duration-150',
+            'checked:border-[var(--accent)] checked:bg-[var(--accent)]',
+          )}
+        />
+
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#14181B"
+          strokeWidth="3.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="pointer-events-none absolute inset-0 m-auto size-3.5 opacity-0 peer-checked:opacity-100"
+        >
+          <path d="M5 13l4 4L19 7" />
+        </svg>
+      </span>
+
       <span>{children}</span>
     </label>
   );

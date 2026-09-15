@@ -8,29 +8,9 @@ import { normalizePhone } from '@/lib/phone';
  * Сообщения заданы явно и по-русски: текст ошибки показывается посетителю,
  * и «Too big: expected number to be <=2000» в форме забора выглядит поломкой.
  */
-const baseLead = z.object({
-  type: z.enum(
-    ['profnastil', 'evroshtaketnik', 'setka-3d', 'zhalyuzi', 'komplekt', 'tolko-vorota'],
-    'Выберите тип ограждения',
-  ),
 
-  // Ноль допустим только для «только ворота» — проверка ниже.
-  // 2000 м не предел, но заявка на 50 000 м почти наверняка опечатка или бот.
-  length: z
-    .number('Укажите длину ограждения')
-    .int('Длина указывается целым числом метров')
-    .min(0, 'Длина не может быть отрицательной')
-    .max(2000, 'Для объектов длиннее 2000 м позвоните нам — посчитаем отдельно'),
-
-  height: z.union(
-    [z.literal(1.5), z.literal(1.8), z.literal(2), z.literal(2.5)],
-    'Выберите высоту ограждения',
-  ),
-
-  gates: z.enum(['otkatnye', 'raspashnye', 'kalitka', 'net'], 'Выберите тип ворот'),
-
-  automation: z.boolean('Укажите, нужна ли автоматика'),
-
+/** Поля, общие для всех форм сайта. */
+const contactFields = {
   name: z.string().trim().max(80, 'Слишком длинное имя').optional(),
 
   phone: z
@@ -52,16 +32,56 @@ const baseLead = z.object({
 
   /** Сколько миллисекунд человек провёл в форме — ниже порога это автомат. */
   elapsedMs: z.number().int().nonnegative().optional(),
+};
+
+/** Длина ограждения. Ноль допустим только там, где забор не ставят. */
+const lengthField = z
+  .number('Укажите длину ограждения')
+  .int('Длина указывается целым числом метров')
+  .min(0, 'Длина не может быть отрицательной')
+  .max(2000, 'Для объектов длиннее 2000 м позвоните нам — посчитаем отдельно');
+
+/** Заявка из квиза: все параметры объекта известны. */
+const quizLead = z.object({
+  kind: z.literal('quiz'),
+  type: z.enum(
+    ['profnastil', 'evroshtaketnik', 'setka-3d', 'zhalyuzi', 'komplekt', 'tolko-vorota'],
+    'Выберите тип ограждения',
+  ),
+  length: lengthField,
+  height: z.union(
+    [z.literal(1.5), z.literal(1.8), z.literal(2), z.literal(2.5)],
+    'Выберите высоту ограждения',
+  ),
+  gates: z.enum(['otkatnye', 'raspashnye', 'kalitka', 'net'], 'Выберите тип ворот'),
+  automation: z.boolean('Укажите, нужна ли автоматика'),
+  ...contactFields,
 });
 
 /**
- * Длина обязательна для всех решений, кроме «только ворота»: там забор не
- * ставят, и требовать метраж было бы бессмысленно.
+ * Короткая заявка из финального блока: человек уже всё прочитал и хочет
+ * просто оставить контакт. Заставлять его проходить квиз на этом месте
+ * значило бы терять тех, кто уже готов.
  */
-export const leadSchema = baseLead.refine(
-  (lead) => lead.type === 'tolko-vorota' || lead.length >= 1,
-  { message: 'Укажите длину ограждения', path: ['length'] },
-);
+const shortLead = z.object({
+  kind: z.literal('short'),
+  task: z
+    .string('Опишите, что нужно сделать')
+    .trim()
+    .min(3, 'Опишите задачу хотя бы парой слов')
+    .max(500, 'Слишком длинное описание — расскажете подробнее по телефону'),
+  length: lengthField.optional(),
+  ...contactFields,
+});
+
+export const leadSchema = z
+  .discriminatedUnion('kind', [quizLead, shortLead])
+  // Длина обязательна для всех решений квиза, кроме «только ворота»: там
+  // забор не ставят, и требовать метраж было бы бессмысленно.
+  .refine((lead) => lead.kind !== 'quiz' || lead.type === 'tolko-vorota' || lead.length >= 1, {
+    message: 'Укажите длину ограждения',
+    path: ['length'],
+  });
 
 export type LeadInput = z.input<typeof leadSchema>;
 export type Lead = z.output<typeof leadSchema>;

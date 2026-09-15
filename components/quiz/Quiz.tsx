@@ -87,6 +87,7 @@ export function Quiz() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          kind: 'quiz',
           type: state.type,
           length: state.length ?? 0,
           height: state.height,
