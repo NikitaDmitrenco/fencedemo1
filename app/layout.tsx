@@ -41,7 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       // Единственная точка, где акцентный цвет клиента попадает в CSS.
       style={{ '--accent': site.brand.accent } as React.CSSProperties}
     >
-      <body>{children}</body>
+      <body>
+        {/* Если скрипты не выполняются, снимаем скрытие с блоков .reveal. */}
+        <noscript>
+          <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }
