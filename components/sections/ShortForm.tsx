@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { site } from '@/content/site.config';
-import { Button } from '@/components/ui/Button';
-import { Consent, Field, Input, Textarea } from '@/components/ui/Field';
+import { Button, Consent, Field, Input, Textarea } from '@/components/ui';
 import { OptionCard } from '@/components/quiz/OptionCard';
 import { MESSENGERS, type Messenger } from '@/content/quiz';
 import { maskPhone } from '@/lib/phone';
+import { clsx } from '@/lib/clsx';
 
 /**
  * Короткая форма финального блока.
@@ -15,6 +15,21 @@ import { maskPhone } from '@/lib/phone';
  * решил, и гнать его обратно через пять шагов — верный способ его потерять.
  * Уходит в тот же /api/lead с другим видом заявки.
  */
+
+/**
+ * Поверхность формы и её же поверхность после отправки. Вынесена в константу,
+ * чтобы блок не менял размер и фон при переходе в состояние «принято» —
+ * иначе финальная секция дёргается ровно в тот момент, когда человек ждёт
+ * подтверждения.
+ *
+ * Цвета не задаются явно: контролы внутри читают переменные тёмной секции
+ * сами, поэтому здесь нет ни одного переопределения через !important.
+ */
+const SHELL = clsx(
+  'rounded-[var(--radius-surface)] border border-[var(--hairline)]',
+  'bg-[var(--surface-bg)] p-6 lg:p-8',
+);
+
 export function ShortForm() {
   const [task, setTask] = useState('');
   const [length, setLength] = useState('');
@@ -24,6 +39,8 @@ export function ShortForm() {
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
+  // Момент открытия формы фиксируется в эффекте, а не при рендере: часы во
+  // время рендера делают его неидемпотентным, а до монтирования ноль безопасен.
   const startedAt = useRef(0);
 
   useEffect(() => {
@@ -73,9 +90,9 @@ export function ShortForm() {
 
   if (status === 'done') {
     return (
-      <div className="border border-white/14 bg-[#151b1e] p-8 text-center">
-        <p className="text-xl font-bold text-white">Заявка принята</p>
-        <p className="measure mx-auto mt-2 text-white/70">
+      <div className={clsx(SHELL, 'text-center')}>
+        <p className="t-h3">Заявка принята</p>
+        <p className="t-sm measure mx-auto mt-3 text-[var(--fg-2)]">
           Перезвоним в рабочее время и уточним детали. Если нужно срочно — звоните сами.
         </p>
       </div>
@@ -83,20 +100,19 @@ export function ShortForm() {
   }
 
   return (
-    <form onSubmit={submit} className="border border-white/14 bg-[#151b1e] p-6 lg:p-8">
-      <p className="text-lg font-bold text-white">Оставьте заявку</p>
-      <p className="mt-1.5 text-[0.9375rem] text-white/65">
+    <form onSubmit={submit} className={SHELL}>
+      <p className="t-h3">Оставьте заявку</p>
+      <p className="t-sm mt-2 text-[var(--fg-2)]">
         Перезвоним, уточним детали и посчитаем точную стоимость.
       </p>
 
-      <div className="mt-6 space-y-4 [&_label]:text-white [&_p]:text-white/55">
+      <div className="mt-6 space-y-5">
         <Field id="short-task" label="Что нужно сделать" required>
           <Textarea
             id="short-task"
             value={task}
             onChange={(e) => setTask(e.target.value)}
             placeholder="Забор из профнастила и откатные ворота"
-            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
@@ -111,7 +127,6 @@ export function ShortForm() {
             onChange={(e) => setLength(e.target.value)}
             placeholder="например, 40"
             aria-describedby="short-length-hint"
-            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
@@ -122,7 +137,6 @@ export function ShortForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Имя"
-            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
@@ -135,13 +149,12 @@ export function ShortForm() {
             value={phone}
             onChange={(e) => setPhone(maskPhone(e.target.value))}
             placeholder="+7 (___) ___-__-__"
-            className="!bg-transparent !text-white !border-white/20 placeholder:!text-white/40"
           />
         </Field>
 
         <div>
-          <p className="mb-1.5 text-sm font-semibold text-white">Как удобнее связаться</p>
-          <div className="grid grid-cols-3 gap-2.5 [&_button]:!border-white/20 [&_button]:!bg-transparent [&_button]:!text-white">
+          <p className="t-xs mb-2 block font-semibold text-[var(--fg)]">Как удобнее связаться</p>
+          <div className="grid gap-2.5 sm:grid-cols-3">
             {MESSENGERS.map((option) => (
               <OptionCard
                 key={option.value}
@@ -153,16 +166,15 @@ export function ShortForm() {
           </div>
         </div>
 
-        <div className="[&_a]:text-white [&_span]:text-white/70">
-          <Consent id="short-consent" checked={consent} onChange={setConsent}>
-            Согласен на обработку персональных данных и принимаю{' '}
-            <a href={site.legal.privacyUrl} className="font-semibold underline underline-offset-2">
-              политику конфиденциальности
-            </a>
-          </Consent>
-        </div>
+        <Consent id="short-consent" checked={consent} onChange={setConsent}>
+          Согласен на обработку персональных данных и принимаю{' '}
+          <a href={site.legal.privacyUrl} className="font-semibold underline underline-offset-2">
+            политику конфиденциальности
+          </a>
+        </Consent>
 
-        {/* Ловушка для ботов: скрыта от людей и от экранных дикторов. */}
+        {/* Ловушка для ботов: скрыта от людей и от экранных дикторов — человек
+            с диктором не должен услышать поле, которое ему нельзя заполнять. */}
         <input
           type="text"
           name="company"
@@ -173,14 +185,18 @@ export function ShortForm() {
         />
       </div>
 
+      {/* На тёмной поверхности обычный --color-danger уходит в грязь,
+          поэтому у ошибки отдельный светлый вариант того же семантического
+          цвета. */}
       {error && (
-        <p role="alert" className="mt-4 text-sm font-medium text-[#FFB4A2]">
+        <p role="alert" className="t-sm mt-4 font-medium text-[var(--color-danger-light)]">
           {error}
         </p>
       )}
 
       <Button
         type="submit"
+        variant="primary"
         size="lg"
         full
         className="mt-6"

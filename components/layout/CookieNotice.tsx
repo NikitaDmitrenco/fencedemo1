@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { site } from '@/content/site.config';
-import { Button } from '@/components/ui/Button';
+import { Button, Card } from '@/components/ui';
 
 const STORAGE_KEY = 'cookie-notice-accepted';
 
@@ -53,26 +53,31 @@ export function CookieNotice() {
     <div
       role="region"
       aria-label="Уведомление об использовании cookie"
-      // На мобильном поднят над панелью «Позвонить | Рассчитать»,
-      // иначе две полосы наложились бы друг на друга.
-      className="fixed inset-x-3 bottom-21 z-50 mx-auto max-w-2xl rounded-[var(--radius-card)] border border-[var(--color-steel-line)] bg-[var(--color-ink-raised)] p-4 sm:inset-x-4 lg:bottom-4"
+      // На мобильном поднят над панелью «Позвонить | Рассчитать» (около 76 px
+      // вместе с safe-area), иначе две полосы наложились бы друг на друга.
+      className="fixed inset-x-3 bottom-24 z-50 mx-auto max-w-2xl sm:inset-x-4 lg:bottom-4"
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <p className="flex-1 text-sm text-white/65">
-          Сайт использует cookie для работы форм и сбора обезличенной статистики. Подробности — в{' '}
-          <Link
-            href={site.legal.privacyUrl as Route}
-            className="font-semibold underline underline-offset-2"
-          >
-            политике конфиденциальности
-          </Link>
-          .
-        </p>
+      <Card className="p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <p className="t-xs flex-1 text-[var(--fg-2)]">
+            Сайт использует cookie для работы форм и сбора обезличенной статистики. Подробности — в{' '}
+            <Link
+              href={site.legal.privacyUrl as Route}
+              className="font-semibold underline underline-offset-2"
+            >
+              политике конфиденциальности
+            </Link>
+            .
+          </p>
 
-        <Button onClick={accept} className="shrink-0">
-          Понятно
-        </Button>
-      </div>
+          {/* Вторичная кнопка намеренно: согласие с cookie — служебное
+              действие, и залитый акцентом «Понятно» соревновался бы за
+              внимание с единственным главным CTA страницы. */}
+          <Button onClick={accept} variant="secondary" size="md" className="shrink-0">
+            Понятно
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 }

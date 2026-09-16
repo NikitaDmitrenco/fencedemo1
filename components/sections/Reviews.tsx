@@ -8,6 +8,10 @@ import { Badge, Card, Reveal, Section } from '@/components/ui';
  * без проверяемого источника собрать невозможно. Развёрнутых отзывов немного,
  * и это осознанно: один содержательный текст убеждает сильнее двадцати
  * карточек «всё отлично, рекомендую».
+ *
+ * Аватар-заглушки с первой буквой имени здесь нет намеренно: буква не несёт
+ * никакой информации, а залитый акцентом квадрат перетягивал на себя больше
+ * внимания, чем сам текст отзыва — единственное, ради чего блок существует.
  */
 
 const SOURCE_LABELS = {
@@ -26,42 +30,34 @@ export function Reviews() {
 
   return (
     <Section
+      tone="sunken"
       eyebrow="Отзывы"
       title="Что пишут заказчики"
       lead="Отзывы с карт — каждый со ссылкой на оригинал, который можно открыть и проверить."
     >
-      <ul className="grid gap-px bg-[var(--color-steel-line)] lg:grid-cols-3">
+      <ul className="grid gap-5 lg:grid-cols-3 lg:gap-6">
         {site.reviews.map((review, i) => (
           <Reveal key={review.url + review.author} as="li" delay={i * 60} className="h-full">
-            <Card className="flex h-full flex-col border-0 p-6">
-              <div className="flex items-center gap-3">
-                <span
-                  aria-hidden="true"
-                  className="flex size-10 shrink-0 items-center justify-center rounded-none bg-[var(--accent)] font-bold text-[var(--color-accent-ink)]"
-                >
-                  {review.author.trim().charAt(0)}
-                </span>
-
-                <span>
-                  <span className="block font-bold">{review.author}</span>
-                  <span className="text-sm text-[var(--color-ink-muted)]">
-                    {formatDate(review.date)}
-                  </span>
-                </span>
+            <Card className="flex h-full flex-col p-6">
+              <div className="flex items-baseline justify-between gap-4">
+                <span className="t-h4">{review.author}</span>
+                <span className="t-xs shrink-0 text-[var(--fg-2)]">{formatDate(review.date)}</span>
               </div>
 
-              <blockquote className="mt-4 flex-1 text-[0.9375rem] text-[var(--color-ink-soft)]">
+              <blockquote className="t-body mt-4 flex-1 text-[var(--fg-2)]">
                 {review.text}
               </blockquote>
 
-              <div className="mt-5 flex items-center justify-between gap-3 border-t border-[var(--color-steel-line)] pt-4">
+              {/* Источник и ссылка идут одной тихой строкой под линией: это
+                  служебная подпись к отзыву, а не призыв уйти с сайта. */}
+              <div className="mt-6 flex items-center justify-between gap-4 border-t border-[var(--hairline)] pt-4">
                 <Badge>{SOURCE_LABELS[review.source]}</Badge>
 
                 <a
                   href={review.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold underline underline-offset-4"
+                  className="t-label text-[var(--fg-2)] underline underline-offset-4 transition-colors hover:text-[var(--accent-fg)]"
                 >
                   Открыть оригинал
                 </a>
@@ -72,7 +68,7 @@ export function Reviews() {
       </ul>
 
       {site.isDemo && (
-        <p className="mt-6 text-sm text-[var(--color-ink-muted)]">
+        <p className="t-xs measure mt-8 text-[var(--fg-3)]">
           В демо тексты отзывов приведены как образец. В рабочей версии здесь стоят только настоящие
           отзывы с рабочими ссылками на карточку компании.
         </p>

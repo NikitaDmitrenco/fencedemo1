@@ -1,5 +1,5 @@
 import { site, formatPhone } from '@/content/site.config';
-import { Reveal, Section } from '@/components/ui';
+import { buttonClass, Reveal, Section } from '@/components/ui';
 import { ShortForm } from './ShortForm';
 
 /**
@@ -28,51 +28,52 @@ export function Contacts() {
       title="Посчитаем ваш объект"
       lead="Оставьте заявку или позвоните — ответим на вопросы и согласуем замер в удобное время."
     >
-      <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+      <div className="grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-8">
         <Reveal className="lg:col-span-5">
-          <div>
-            <a
-              href={`tel:${company.phone}`}
-              className="inline-block text-3xl font-bold text-white transition-colors hover:text-[var(--accent)] lg:text-4xl"
-            >
-              {formatPhone(company.phone)}
-            </a>
+          {/* Номер — самый крупный элемент колонки: он же самый короткий путь
+              к сделке, всё остальное здесь только подтверждает реальность
+              компании. */}
+          <a
+            href={`tel:${company.phone}`}
+            className="t-h2 inline-block tabular-nums transition-colors hover:text-[var(--accent-fg)]"
+          >
+            {formatPhone(company.phone)}
+          </a>
 
-            {messengers.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-3">
-                {messengers.map((m) => (
-                  <a
-                    key={m.label}
-                    href={m.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-[var(--radius-control)] border border-white/20 px-4 py-2.5 font-semibold text-white transition-colors hover:border-white/45"
-                  >
-                    {m.label}
-                  </a>
-                ))}
-              </div>
-            )}
+          {messengers.length > 0 && (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {messengers.map((m) => (
+                <a
+                  key={m.label}
+                  href={m.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonClass('secondary')}
+                >
+                  {m.label}
+                </a>
+              ))}
+            </div>
+          )}
 
-            <dl className="mt-10 space-y-5 border-t border-white/12 pt-8">
-              <div>
-                <dt className="text-sm text-white/50">География работ</dt>
-                <dd className="mt-1 font-semibold text-white">{company.geo}</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-white/50">Адрес</dt>
-                <dd className="mt-1 font-semibold text-white">{company.address}</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-white/50">Время работы</dt>
-                <dd className="mt-1 font-semibold text-white">{company.workHours}</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-white/50">Реквизиты</dt>
-                <dd className="mt-1 text-white/75">{legal.requisites}</dd>
-              </div>
-            </dl>
-          </div>
+          <dl className="mt-10 space-y-5 border-t border-[var(--hairline)] pt-8">
+            <div>
+              <dt className="t-xs text-[var(--fg-3)]">География работ</dt>
+              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg)]">{company.geo}</dd>
+            </div>
+            <div>
+              <dt className="t-xs text-[var(--fg-3)]">Адрес</dt>
+              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg)]">{company.address}</dd>
+            </div>
+            <div>
+              <dt className="t-xs text-[var(--fg-3)]">Время работы</dt>
+              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg)]">{company.workHours}</dd>
+            </div>
+            <div>
+              <dt className="t-xs text-[var(--fg-3)]">Реквизиты</dt>
+              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg-2)]">{legal.requisites}</dd>
+            </div>
+          </dl>
         </Reveal>
 
         <Reveal delay={100} className="lg:col-span-6 lg:col-start-7">

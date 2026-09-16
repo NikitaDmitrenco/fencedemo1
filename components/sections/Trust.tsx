@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { site } from '@/content/site.config';
-import { Reveal, Section } from '@/components/ui';
+import { clsx } from '@/lib/clsx';
+import { CheckIcon, Reveal, Section } from '@/components/ui';
 import type { Fact } from '@/content/types';
 
 /**
@@ -9,6 +10,8 @@ import type { Fact } from '@/content/types';
  * Цифры берутся из конфига, где непроверенное значение имеет тип '[X]'.
  * В демо все они и стоят как [X] — выдуманные «15 лет на рынке» на сайте
  * компании, работающей три года, клиент заметит не сразу, но заметит.
+ * Поэтому показатели свёрстаны как таблица характеристик, а не как крупные
+ * рекламные числа: доказательство должно выглядеть спокойно.
  */
 
 function factText(value: Fact): string {
@@ -27,14 +30,16 @@ export function Trust() {
 
   return (
     <Section
-      tone="ink"
+      tone="canvas"
       eyebrow="О компании"
       title="Почему нам доверяют"
       lead="Всё, что можно проверить: цифры, производство, документы и человек, который отвечает за результат."
     >
-      <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
-        <div>
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-8">
+      <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-7">
+          {/* Обе колонки начинаются одной волосяной линией на одной высоте —
+              так таблица показателей и портрет стоят на общей сетке. */}
+          <dl className="grid grid-cols-2 border-t border-[var(--hairline)]">
             {facts.map((fact, i) => (
               // Обёртка Reveal сама выступает группирующим div: внутри <dl>
               // допустим ровно один уровень <div> вокруг пары <dt>/<dd>,
@@ -43,23 +48,33 @@ export function Trust() {
               // Порядок тоже обязателен — <dt> перед своим <dd>. Визуально
               // цифра сверху, и это задаётся направлением flex, а не
               // перестановкой элементов в разметке.
-              <Reveal key={fact.label} delay={i * 60} className="flex flex-col-reverse">
-                <dt className="mt-1.5 text-[0.9375rem] text-white/60">{fact.label}</dt>
-                <dd className="text-5xl font-bold tracking-[-0.06em] text-white lg:text-7xl">
-                  {factText(fact.value)}
-                </dd>
+              <Reveal
+                key={fact.label}
+                delay={i * 60}
+                className={clsx(
+                  // justify-end в column-reverse прижимает содержимое к верху:
+                  // иначе растянутая по высоте ячейка пакует цифру вниз и
+                  // числа в строке перестают стоять на одной базовой линии.
+                  'flex flex-col-reverse justify-end border-b border-[var(--hairline)] py-6',
+                  i % 2 === 1 ? 'border-l border-[var(--hairline)] pl-6' : 'pr-6',
+                )}
+              >
+                <dt className="t-sm mt-3 text-[var(--fg-2)]">{fact.label}</dt>
+                <dd className="t-metric">{factText(fact.value)}</dd>
               </Reveal>
             ))}
           </dl>
 
           <Reveal>
-            <ul className="mt-10 space-y-3 border-t border-white/12 pt-8 text-[0.9375rem]">
+            <ul className="mt-8 space-y-4">
               {trust.production && (
                 <li className="flex gap-3">
-                  <Check />
-                  <span>
-                    <span className="font-bold text-white">Собственное производство.</span>{' '}
-                    <span className="text-white/65">
+                  <span className="flex h-6 shrink-0 items-center text-[var(--accent-fg)]">
+                    <CheckIcon />
+                  </span>
+                  <span className="t-sm">
+                    <span className="font-bold">Собственное производство.</span>{' '}
+                    <span className="text-[var(--fg-2)]">
                       Каркас, ворота и калитку варим и красим сами, без посредников.
                     </span>
                   </span>
@@ -68,10 +83,12 @@ export function Trust() {
 
               {trust.contract && (
                 <li className="flex gap-3">
-                  <Check />
-                  <span>
-                    <span className="font-bold text-white">Договор и фиксированная смета.</span>{' '}
-                    <span className="text-white/65">
+                  <span className="flex h-6 shrink-0 items-center text-[var(--accent-fg)]">
+                    <CheckIcon />
+                  </span>
+                  <span className="t-sm">
+                    <span className="font-bold">Договор и фиксированная смета.</span>{' '}
+                    <span className="text-[var(--fg-2)]">
                       Стоимость закрепляется до начала работ и не растёт по ходу.
                     </span>
                   </span>
@@ -79,10 +96,12 @@ export function Trust() {
               )}
 
               <li className="flex gap-3">
-                <Check />
-                <span>
-                  <span className="font-bold text-white">Свои монтажники.</span>{' '}
-                  <span className="text-white/65">
+                <span className="flex h-6 shrink-0 items-center text-[var(--accent-fg)]">
+                  <CheckIcon />
+                </span>
+                <span className="t-sm">
+                  <span className="font-bold">Свои монтажники.</span>{' '}
+                  <span className="text-[var(--fg-2)]">
                     Работу выполняют наши бригады, а не случайный субподряд.
                   </span>
                 </span>
@@ -92,15 +111,15 @@ export function Trust() {
         </div>
 
         {trust.owner && (
-          <Reveal delay={120}>
-            <figure className="border-t border-white/20 pt-6 lg:pt-8">
+          <Reveal delay={120} className="lg:col-span-5">
+            <figure className="border-t border-[var(--hairline)] pt-6">
               {trust.owner.photo ? (
-                <div className="relative mb-6 aspect-4/5 w-full max-w-64 overflow-hidden">
+                <div className="relative aspect-4/5 w-full overflow-hidden rounded-[var(--radius-surface)] bg-[var(--color-ink-raised)]">
                   <Image
                     src={trust.owner.photo}
                     alt={trust.owner.name}
                     fill
-                    sizes="256px"
+                    sizes="(min-width: 1024px) 40vw, 100vw"
                     className="object-cover"
                   />
                 </div>
@@ -108,42 +127,23 @@ export function Trust() {
                 // Заглушка честно называет себя: живое фото владельца —
                 // один из самых сильных элементов на таком сайте, и его
                 // отсутствие лучше обозначить, чем маскировать стоком.
-                <div className="mb-6 flex aspect-4/5 w-full max-w-64 items-center justify-center border border-dashed border-white/25 p-6 text-center text-sm text-white/45">
-                  Здесь будет фотография владельца или команды
+                <div className="flex aspect-4/5 w-full items-center justify-center rounded-[var(--radius-surface)] border border-dashed border-[var(--hairline-strong)] bg-[var(--surface-bg-quiet)] p-6">
+                  <span className="t-sm measure-tight text-center text-[var(--fg-3)]">
+                    Здесь будет фотография владельца или команды
+                  </span>
                 </div>
               )}
 
-              <blockquote className="measure text-lg text-white/85">
-                «{trust.owner.quote}»
-              </blockquote>
+              <blockquote className="t-lead mt-6">«{trust.owner.quote}»</blockquote>
 
-              <figcaption className="mt-5 border-t border-white/12 pt-5">
-                <span className="block font-bold text-white">{trust.owner.name}</span>
-                <span className="text-sm text-white/55">{trust.owner.role}</span>
+              <figcaption className="mt-6 border-t border-[var(--hairline)] pt-5">
+                <span className="t-h4 block">{trust.owner.name}</span>
+                <span className="t-sm mt-1 block text-[var(--fg-2)]">{trust.owner.role}</span>
               </figcaption>
             </figure>
           </Reveal>
         )}
       </div>
     </Section>
-  );
-}
-
-function Check() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--accent)"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="mt-0.5 shrink-0"
-    >
-      <path d="M5 13l4 4L19 7" />
-    </svg>
   );
 }

@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import type { Route } from 'next';
 import { site, formatPhone } from '@/content/site.config';
-import { Container } from '@/components/ui/Container';
+import { Container } from '@/components/ui';
 import { NAV_LINKS } from '@/lib/nav';
 
 /**
  * Футер. По ТЗ здесь закрываются последние вопросы: куда звонить, куда
  * выезжают, с кем заключается договор и где юридические документы.
+ *
+ * Тёмная поверхность — не случайный блок, а нижняя опора страницы: светлый
+ * холст заканчивается ровно так же, как начинался первым экраном. Колонки
+ * лежат на той же 12-колоночной сетке, что и секции.
  */
 export function Footer() {
   const { company, legal } = site;
@@ -23,34 +27,37 @@ export function Footer() {
     // Нижний отступ на мобильном учитывает панель «Позвонить | Рассчитать»:
     // она зафиксирована поверх страницы и без запаса накрывала бы последние
     // строки с реквизитами.
-    <footer className="border-t border-[var(--color-steel-line)] bg-[var(--color-ink)] pt-16 pb-28 text-white/70 lg:pt-20 lg:pb-12">
+    <footer
+      data-surface="ink-deep"
+      className="border-t border-[var(--hairline)] pt-16 pb-28 lg:pt-20 lg:pb-12"
+    >
       <Container>
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <p className="technical-label text-[var(--accent)]">{company.name}</p>
-            <p className="mt-3 text-sm">{company.geo}</p>
-            <p className="mt-1 text-sm">{company.workHours}</p>
+        <div className="grid items-start gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-12">
+          <div className="lg:col-span-3">
+            <p className="t-h4">{company.name}</p>
+            <p className="t-sm mt-3 text-[var(--fg-2)]">{company.geo}</p>
+            <p className="t-sm mt-1 text-[var(--fg-2)]">{company.workHours}</p>
           </div>
 
-          <div>
-            <p className="technical-label text-white/45">Связаться</p>
+          <div className="lg:col-span-3">
+            <p className="t-label text-[var(--fg-3)]">Связаться</p>
 
             <a
               href={`tel:${company.phone}`}
-              className="mt-3 block text-lg font-bold text-white transition-colors hover:text-[var(--accent)]"
+              className="t-h3 mt-3 block whitespace-nowrap transition-colors hover:text-[var(--accent-fg)]"
             >
               {formatPhone(company.phone)}
             </a>
 
             {messengers.length > 0 && (
-              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              <ul className="t-sm mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[var(--fg-2)]">
                 {messengers.map((m) => (
                   <li key={m.label}>
                     <a
                       href={m.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline underline-offset-4 transition-colors hover:text-white"
+                      className="underline underline-offset-4 transition-colors hover:text-[var(--fg)]"
                     >
                       {m.label}
                     </a>
@@ -59,15 +66,15 @@ export function Footer() {
               </ul>
             )}
 
-            <p className="mt-3 text-sm">{company.address}</p>
+            <p className="t-sm mt-3 text-[var(--fg-2)]">{company.address}</p>
           </div>
 
-          <div>
-            <p className="technical-label text-white/45">Разделы</p>
-            <ul className="mt-3 space-y-1.5 text-sm">
+          <div className="lg:col-span-3">
+            <p className="t-label text-[var(--fg-3)]">Разделы</p>
+            <ul className="t-sm mt-3 space-y-2 text-[var(--fg-2)]">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="transition-colors hover:text-white">
+                  <a href={link.href} className="transition-colors hover:text-[var(--fg)]">
                     {link.label}
                   </a>
                 </li>
@@ -75,13 +82,13 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
-            <p className="technical-label text-white/45">Документы</p>
-            <ul className="mt-3 space-y-1.5 text-sm">
+          <div className="lg:col-span-3">
+            <p className="t-label text-[var(--fg-3)]">Документы</p>
+            <ul className="t-sm mt-3 space-y-2 text-[var(--fg-2)]">
               <li>
                 <Link
                   href={legal.privacyUrl as Route}
-                  className="transition-colors hover:text-white"
+                  className="transition-colors hover:text-[var(--fg)]"
                 >
                   Политика конфиденциальности
                 </Link>
@@ -89,7 +96,7 @@ export function Footer() {
               <li>
                 <Link
                   href={legal.consentUrl as Route}
-                  className="transition-colors hover:text-white"
+                  className="transition-colors hover:text-[var(--fg)]"
                 >
                   Согласие на обработку данных
                 </Link>
@@ -98,11 +105,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/12 pt-6 text-sm">
+        <div className="t-xs mt-12 border-t border-[var(--hairline)] pt-6 text-[var(--fg-3)]">
           <p>{legal.requisites}</p>
 
           {site.isDemo && (
-            <p className="mt-3 text-white/45">
+            <p className="mt-3">
               Демонстрационный сайт. Название, контакты, цены, сроки, отзывы и фотографии —
               заменяемые примеры. Факты, требующие подтверждения, отмечены как [X].
             </p>

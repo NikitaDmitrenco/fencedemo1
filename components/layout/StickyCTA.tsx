@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { site } from '@/content/site.config';
+import { buttonClass, PhoneIcon } from '@/components/ui';
 import { CALC_ANCHOR } from '@/lib/nav';
 import { clsx } from '@/lib/clsx';
 
@@ -11,6 +12,10 @@ import { clsx } from '@/lib/clsx';
  * Появляется после первого экрана: поверх hero она конкурировала бы с его
  * собственными кнопками. Учитывает safe-area, иначе на iPhone кнопки уезжают
  * под системную полосу.
+ *
+ * Кнопки собираются тем же buttonClass, что и везде: панель — не отдельный
+ * виджет, а продолжение страницы, и «Рассчитать» здесь обязано выглядеть
+ * ровно так же, как в шапке и в секциях.
  */
 export function StickyCTA() {
   const [visible, setVisible] = useState(false);
@@ -36,43 +41,27 @@ export function StickyCTA() {
 
   return (
     <div
+      data-surface="canvas"
       className={clsx(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-steel-line)]',
-        'bg-[var(--color-ink)] lg:hidden',
+        'fixed inset-x-0 bottom-0 z-40 border-t border-[var(--hairline)] lg:hidden',
         'transition-transform duration-300 ease-[var(--ease-out-soft)]',
         visible ? 'translate-y-0' : 'translate-y-full',
       )}
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.625rem)' }}
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.75rem)' }}
       // Скрытая панель не должна ловить фокус с клавиатуры.
       aria-hidden={!visible}
       inert={!visible || undefined}
     >
-      <div className="flex gap-3 px-4 pt-2.5">
+      <div className="flex gap-3 px-4 pt-3">
         <a
           href={`tel:${site.company.phone}`}
-          className="inline-flex min-h-13 flex-1 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-steel-line)] text-white font-semibold"
+          className={clsx(buttonClass('secondary', 'md'), 'flex-1')}
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 20 20"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            aria-hidden="true"
-          >
-            <path
-              d="M4.2 3h3l1.3 3.2-1.8 1.3a10.5 10.5 0 004.8 4.8l1.3-1.8L16 11.8v3a1.5 1.5 0 01-1.7 1.5A13.2 13.2 0 013 4.7 1.5 1.5 0 014.2 3z"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <PhoneIcon />
           Позвонить
         </a>
 
-        <a
-          href={CALC_ANCHOR}
-          className="inline-flex min-h-13 flex-1 items-center justify-center rounded-[var(--radius-control)] bg-[var(--accent)] font-bold whitespace-nowrap text-[var(--color-accent-ink)]"
-        >
+        <a href={CALC_ANCHOR} className={clsx(buttonClass('primary', 'md'), 'flex-1')}>
           Рассчитать
         </a>
       </div>

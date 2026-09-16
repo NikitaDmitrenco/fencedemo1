@@ -4,8 +4,7 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { site } from '@/content/site.config';
 import { estimatePrice, formatRub, type FenceType } from '@/content/pricing';
 import { FENCE_TYPES, GATES, HEIGHTS, LENGTH_PRESETS, MESSENGERS } from '@/content/quiz';
-import { Button } from '@/components/ui/Button';
-import { Consent, Field, Input } from '@/components/ui/Field';
+import { Button, Card, CheckIcon, Consent, Field, Input } from '@/components/ui';
 import { OptionCard } from './OptionCard';
 import { maskPhone } from '@/lib/phone';
 import { clsx } from '@/lib/clsx';
@@ -25,6 +24,10 @@ const STEP_TITLES: Record<(typeof STEPS)[number], string> = {
   gates: 'Нужны ли ворота?',
   contact: 'Куда отправить расчёт?',
 };
+
+/** Одна поверхность и один внутренний отступ на всех шагах и состояниях —
+ *  иначе карточка «прыгает» в размерах при переходе к результату. */
+const SHELL = 'p-6 lg:p-8';
 
 type Status = 'idle' | 'sending' | 'done' | 'error';
 
@@ -119,25 +122,16 @@ export function Quiz() {
 
   if (status === 'done') {
     return (
-      <div className="border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-8 text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-none bg-[var(--accent)]">
-          <svg
-            width="26"
-            height="26"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#14181B"
-            strokeWidth="2.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
+      <Card className={clsx(SHELL, 'text-center')}>
+        {/* Подтверждение намеренно тихое: заявка на замер — начало работы, а
+            не праздник, и громкая «победа» здесь звучит фальшиво. */}
+        <span className="mx-auto flex size-12 items-center justify-center rounded-[var(--radius-control)] bg-[var(--color-accent-soft)] text-[var(--accent)]">
+          <CheckIcon size={22} />
+        </span>
 
-        <p className="mt-5 text-xl font-bold">Заявка отправлена</p>
+        <p className="t-h3 mt-5">Заявка отправлена</p>
 
-        <p className="measure mx-auto mt-2 text-[var(--color-ink-soft)]">
+        <p className="t-sm measure mx-auto mt-3 text-[var(--fg-2)]">
           Перезвоним в рабочее время, уточним детали и согласуем замер. Если нужно срочно —
           позвоните сами:{' '}
           <a
@@ -147,7 +141,7 @@ export function Quiz() {
             {site.company.phone.replace(/(\+7)(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 ($2) $3-$4-$5')}
           </a>
         </p>
-      </div>
+      </Card>
     );
   }
 
@@ -155,21 +149,23 @@ export function Quiz() {
   const current = visibleStepIndex(state);
 
   return (
-    <div className="border border-[var(--color-steel-line)] bg-[var(--color-paper-raised)] p-5 sm:p-8">
-      {/* Прогресс: человек должен видеть, что вопросов мало и они кончаются. */}
-      <div className="flex items-center gap-3">
+    <Card className={SHELL}>
+      {/* Прогресс: человек должен видеть, что вопросов мало и они кончаются.
+          Сегменты равные и пересчитаны под реально видимые шаги — при выборе
+          «только ворота» два вопроса отпадают, и шкала не должна врать. */}
+      <div className="flex items-center gap-4">
         <div className="flex flex-1 gap-1.5">
           {Array.from({ length: total }, (_, i) => (
             <span
               key={i}
               className={clsx(
-                'h-px flex-1 transition-colors duration-300',
-                i <= current ? 'bg-[var(--accent)]' : 'bg-[var(--color-steel-line)]',
+                'h-0.5 flex-1 transition-colors duration-300',
+                i <= current ? 'bg-[var(--accent)]' : 'bg-[var(--hairline-strong)]',
               )}
             />
           ))}
         </div>
-        <span className="text-sm font-semibold text-[var(--color-ink-muted)] tabular-nums">
+        <span className="t-label shrink-0 text-[var(--fg-3)] tabular-nums">
           {current + 1} / {total}
         </span>
       </div>
@@ -178,12 +174,12 @@ export function Quiz() {
         ref={headingRef}
         tabIndex={-1}
         aria-live="polite"
-        className="mt-6 text-xl font-bold outline-none sm:text-2xl"
+        className="t-h3 mt-6 outline-none"
       >
         {STEP_TITLES[step]}
       </p>
 
-      <div className="mt-5">
+      <div className="mt-6">
         {step === 'type' && (
           <div className="grid gap-2.5 sm:grid-cols-2">
             {FENCE_TYPES.map((option) => (
@@ -215,7 +211,7 @@ export function Quiz() {
               ))}
             </div>
 
-            <div className="mt-4">
+            <div className="mt-5">
               <Field id="quiz-length" label="Или своя длина, метров">
                 <Input
                   id="quiz-length"
@@ -277,20 +273,45 @@ export function Quiz() {
             </div>
 
             {state.gates !== null && state.gates !== 'net' && (
-              <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-[var(--radius-control)] border border-[var(--color-steel-line)] p-4">
+              // Уточнение к выбору ворот, а не отдельный тип контрола: выглядит
+              // и нажимается ровно как вариант ответа выше. Настоящий чекбокс
+              // остаётся в разметке ради клавиатуры и экранных дикторов, но
+              // прячется — его нативный вид выпадает из языка карточек.
+              <label
+                className={clsx(
+                  'mt-2.5 flex min-h-14 w-full cursor-pointer items-center gap-3',
+                  'rounded-[var(--radius-control)] border p-3',
+                  'transition-colors duration-150 ease-[var(--ease-out-soft)]',
+                  state.automation
+                    ? 'border-[var(--accent-fg)] bg-[color-mix(in_srgb,var(--accent-fg)_12%,transparent)]'
+                    : 'border-[var(--hairline-strong)] hover:border-[var(--fg-2)]',
+                )}
+              >
                 <input
                   type="checkbox"
                   checked={state.automation}
                   onChange={(e) =>
                     dispatch({ kind: 'set', patch: { automation: e.target.checked } })
                   }
-                  className="size-5 accent-[var(--accent)]"
+                  className="peer sr-only"
                 />
-                <span>
+                <span className="min-w-0 flex-1">
                   <span className="block font-semibold">Нужна автоматика</span>
-                  <span className="text-sm text-[var(--color-ink-muted)]">
+                  <span className="t-xs mt-1 block text-[var(--fg-2)]">
                     привод, пульты, открывание без выхода из машины
                   </span>
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={clsx(
+                    'flex size-5 shrink-0 items-center justify-center rounded-[var(--radius-control)] border transition-colors',
+                    'peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--accent)]',
+                    state.automation
+                      ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
+                      : 'border-[var(--hairline-strong)]',
+                  )}
+                >
+                  {state.automation && <CheckIcon size={12} />}
                 </span>
               </label>
             )}
@@ -301,23 +322,24 @@ export function Quiz() {
           <div>
             {/* Результат показывается ДО запроса телефона. Цена в обмен на
                 номер выглядит как торг и отсекает часть посетителей; телефон
-                просим за точный расчёт и выезд замерщика. */}
+                просим за точный расчёт и выезд замерщика. Поэтому диапазон —
+                самый заметный элемент шага, а не сноска над полями. */}
             {range && (
-              <div className="rounded-[var(--radius-control)] border border-[var(--accent)]/35 bg-[var(--accent)]/8 p-5">
-                <p className="text-sm font-semibold text-[var(--color-ink-soft)]">
+              <div className="rounded-[var(--radius-surface)] bg-[var(--color-accent-soft)] p-5 sm:p-6">
+                <p className="t-sm font-medium text-[var(--fg-2)]">
                   Предварительно ваш проект обойдётся в
                 </p>
-                <p className="mt-1.5 text-2xl font-bold sm:text-3xl">
+                <p className="t-h2 mt-2 tabular-nums">
                   {formatRub(range.low)} — {formatRub(range.high)}
                 </p>
-                <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
+                <p className="t-sm mt-3 text-[var(--fg-2)]">
                   Это оценка без замера. Точную стоимость назовём после выезда на участок — она
                   зависит от грунта, перепадов высот и подъезда.
                 </p>
               </div>
             )}
 
-            <div className="mt-5 space-y-4">
+            <div className="mt-6 space-y-5">
               <Field id="quiz-name" label="Как к вам обращаться">
                 <Input
                   id="quiz-name"
@@ -343,8 +365,10 @@ export function Quiz() {
               </Field>
 
               <div>
-                <p className="mb-1.5 text-sm font-semibold">Как удобнее связаться</p>
-                <div className="grid grid-cols-3 gap-2.5">
+                <p className="t-xs mb-2 block font-semibold text-[var(--fg)]">
+                  Как удобнее связаться
+                </p>
+                <div className="grid gap-2.5 sm:grid-cols-3">
                   {MESSENGERS.map((option) => (
                     <OptionCard
                       key={option.value}
@@ -370,7 +394,9 @@ export function Quiz() {
                 </a>
               </Consent>
 
-              {/* Ловушка для ботов: скрыта от людей и от экранных дикторов. */}
+              {/* Ловушка для ботов: скрыта от людей и от экранных дикторов —
+                  человек с диктором не должен услышать поле, которое ему
+                  нельзя заполнять. */}
               <input
                 type="text"
                 name="company"
@@ -382,7 +408,7 @@ export function Quiz() {
             </div>
 
             {error && (
-              <p role="alert" className="mt-4 text-sm font-medium text-[var(--color-warn)]">
+              <p role="alert" className="t-sm mt-4 font-medium text-[var(--color-danger)]">
                 {error}
               </p>
             )}
@@ -390,10 +416,14 @@ export function Quiz() {
         )}
       </div>
 
-      <div className="mt-6 flex items-center gap-3">
+      {/* На узком экране кнопки встают в колонку: «Получить точный расчёт»
+          в строке с «Назад» сжимается до нечитаемой ширины. */}
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
         {state.step > 0 && (
           <Button
-            variant="outline"
+            variant="secondary"
+            size="lg"
+            className="sm:shrink-0"
             onClick={() => dispatch({ kind: 'back' })}
             disabled={status === 'sending'}
           >
@@ -404,7 +434,7 @@ export function Quiz() {
         {step === 'contact' ? (
           <Button
             size="lg"
-            className="flex-1"
+            className="sm:flex-1"
             disabled={!canAdvance(state) || status === 'sending'}
             onClick={submit}
           >
@@ -413,7 +443,7 @@ export function Quiz() {
         ) : (
           <Button
             size="lg"
-            className="flex-1"
+            className="sm:flex-1"
             disabled={!canAdvance(state)}
             onClick={() => dispatch({ kind: 'next' })}
           >
@@ -421,6 +451,6 @@ export function Quiz() {
           </Button>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

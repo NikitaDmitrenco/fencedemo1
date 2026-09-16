@@ -17,15 +17,20 @@ export function Calculator() {
       lead="Пять коротких вопросов — покажем диапазон цены сразу, до того как спросим телефон. Занимает около минуты."
     >
       <div className="grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-8">
-        <Reveal className="border-l border-[var(--accent)] pl-5 lg:col-span-3 lg:sticky lg:top-28">
-          <p className="technical-label text-[var(--accent)]">01 / Estimate</p>
-          <p className="mt-4 text-xl font-semibold leading-snug">
-            Сначала диапазон. Детали — после замера.
-          </p>
-          <p className="mt-4 text-sm text-[var(--color-ink-soft)]">
-            Расчёт остаётся предварительным: рельеф и грунт оцениваются на объекте.
-          </p>
+        {/* Пояснение держится у верхнего края квиза, пока человек отвечает:
+            оно снимает главное возражение («а вдруг цифра обманет»), поэтому
+            должно оставаться в поле зрения на длинных шагах. Отступ сверху —
+            высота шапки (64 px) плюс запас, иначе колонка прилипает вплотную
+            к ней и выглядит как часть меню. */}
+        <Reveal className="lg:sticky lg:top-24 lg:col-span-3">
+          <div className="border-t border-[var(--hairline)] pt-5">
+            <p className="t-h4">Сначала диапазон. Детали — после замера.</p>
+            <p className="t-sm mt-3 text-[var(--fg-2)]">
+              Расчёт остаётся предварительным: рельеф и грунт оцениваются на объекте.
+            </p>
+          </div>
         </Reveal>
+
         <Reveal className="lg:col-span-8 lg:col-start-5">
           <Quiz />
         </Reveal>
