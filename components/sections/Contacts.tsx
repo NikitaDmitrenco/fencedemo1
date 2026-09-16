@@ -24,7 +24,6 @@ export function Contacts() {
     <Section
       id="contacts"
       tone="ink"
-      eyebrow="Контакты"
       title="Посчитаем ваш объект"
       lead="Оставьте заявку или позвоните — ответим на вопросы и согласуем замер в удобное время."
     >

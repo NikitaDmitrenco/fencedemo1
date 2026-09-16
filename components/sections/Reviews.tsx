@@ -31,7 +31,6 @@ export function Reviews() {
   return (
     <Section
       tone="sunken"
-      eyebrow="Отзывы"
       title="Что пишут заказчики"
       lead="Отзывы с карт — каждый со ссылкой на оригинал, который можно открыть и проверить."
     >

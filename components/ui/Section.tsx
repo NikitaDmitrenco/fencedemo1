@@ -18,7 +18,6 @@ export type SectionTone = 'canvas' | 'sunken' | 'ink';
 export function Section({
   id,
   tone = 'canvas',
-  eyebrow,
   title,
   lead,
   aside,
@@ -27,15 +26,14 @@ export function Section({
 }: {
   id?: string;
   tone?: SectionTone;
-  eyebrow?: string;
   title?: string;
   lead?: string;
-  /** Короткая строка у правого края шапки секции — уточнение, не второй CTA. */
+  /** Уточнение под лидом секции — не второй CTA. */
   aside?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
 }) {
-  const hasHeader = Boolean(eyebrow || title || lead);
+  const hasHeader = Boolean(title || lead);
 
   return (
     <section
@@ -47,18 +45,17 @@ export function Section({
         {hasHeader && (
           <Reveal className="mb-10 lg:mb-16">
             {/* Волосяная линия сверху — начало секции читается как разворот
-                каталога: линия, рубрика, заголовок. */}
+                каталога: линия, затем заголовок у самого левого края. */}
             <div className="border-t border-[var(--hairline)] pt-5 lg:pt-6">
-              <div className="grid gap-x-8 gap-y-4 lg:grid-cols-12">
-                {eyebrow && (
-                  <p className="t-label text-[var(--accent-fg)] lg:col-span-3">{eyebrow}</p>
-                )}
+              <div className="grid gap-x-8 gap-y-5 lg:grid-cols-12">
+                {title && <h2 className="t-h2 text-balance lg:col-span-5">{title}</h2>}
 
-                <div className={clsx('lg:col-span-9', !eyebrow && 'lg:col-start-4')}>
-                  {title && <h2 className="t-h2 max-w-[22ch] text-balance">{title}</h2>}
-                  {lead && <p className="t-lead measure mt-5">{lead}</p>}
-                  {aside && <div className="mt-6">{aside}</div>}
-                </div>
+                {(lead || aside) && (
+                  <div className={clsx('lg:col-span-6 lg:col-start-7', title && 'lg:mt-2')}>
+                    {lead && <p className="t-lead measure">{lead}</p>}
+                    {aside && <div className="mt-6">{aside}</div>}
+                  </div>
+                )}
               </div>
             </div>
           </Reveal>

@@ -25,22 +25,20 @@ export function Faq() {
     <Section
       id="faq"
       tone="canvas"
-      eyebrow="Вопросы"
       title="Коротко о главном"
       lead="Если вашего вопроса здесь нет — позвоните, ответим без лишних формальностей."
     >
-      {/* Колонки 4–12 — та же ось, что у заголовка секции: вопросы начинаются
-          ровно под ним, а рубрика слева остаётся единственным элементом
-          первых трёх колонок на всей странице. */}
-      <div className="grid gap-x-8 lg:grid-cols-12">
-        <Reveal className="lg:col-span-9 lg:col-start-4">
-          <Accordion>
-            {site.faq.map((item) => (
-              <AccordionItem key={item.q} question={item.q} answer={item.a} />
-            ))}
-          </Accordion>
-        </Reveal>
-      </div>
+      {/* Во всю ширину контейнера, как и тело остальных секций: заголовок
+          теперь стоит у левого края, и отдельная ось для вопросов только
+          ломала бы общий ритм. Длину строки ответа держит measure внутри
+          самого элемента аккордеона. */}
+      <Reveal>
+        <Accordion>
+          {site.faq.map((item) => (
+            <AccordionItem key={item.q} question={item.q} answer={item.a} />
+          ))}
+        </Accordion>
+      </Reveal>
 
       <script
         type="application/ld+json"
