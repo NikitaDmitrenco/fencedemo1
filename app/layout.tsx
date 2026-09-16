@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0b0e10',
+  themeColor: '#f7f6f3',
   // viewport-fit нужен sticky-панели «Позвонить | Рассчитать» на iPhone.
   viewportFit: 'cover',
   width: 'device-width',
@@ -62,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       // Единственная точка, где акцентный цвет клиента попадает в CSS.
       style={{ '--accent': site.brand.accent } as React.CSSProperties}
     >
-      <body>
+      <body data-surface="canvas">
         {/* Если скрипты не выполняются, снимаем скрытие с блоков .reveal. */}
         <noscript>
           <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>

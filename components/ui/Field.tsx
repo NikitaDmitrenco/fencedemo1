@@ -1,10 +1,16 @@
 import { clsx } from '@/lib/clsx';
 
+/**
+ * Общий вид контрола. Построен на переменных поверхности, поэтому одно и то
+ * же поле корректно выглядит и в светлой секции, и в тёмной — без точечных
+ * переопределений цвета на месте использования.
+ */
 const CONTROL = clsx(
-  'w-full rounded-[var(--radius-control)] border border-[var(--color-steel-line)]',
-  'bg-transparent px-4 py-3.5 text-base text-white',
-  'placeholder:text-[var(--color-ink-muted)]',
-  'transition-colors duration-150 focus:border-[var(--accent)] focus:outline-none',
+  'w-full rounded-[var(--radius-control)] border border-[var(--hairline-strong)]',
+  'bg-[var(--field-bg)] px-4 text-[var(--fg)]',
+  'min-h-13 py-3',
+  'placeholder:text-[var(--fg-3)]',
+  'transition-colors duration-150 focus:border-[var(--fg)] focus:outline-none',
   // Шрифт не меньше 16 px: иначе Safari на iOS зумит страницу при фокусе.
   'text-[16px]',
 );
@@ -14,7 +20,6 @@ const CONTROL = clsx(
  *
  * Идентификаторы подсказки и ошибки предсказуемы — `<id>-hint` и `<id>-error`,
  * — поэтому потребитель связывает их с контролом сам через aria-describedby.
- * Это честнее, чем прокидывать пропсы через клонирование children.
  */
 export function Field({
   id,
@@ -33,10 +38,10 @@ export function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-white">
+      <label htmlFor={id} className="t-xs mb-2 block font-semibold text-[var(--fg)]">
         {label}
         {required && (
-          <span className="text-[var(--color-warn)]" aria-hidden="true">
+          <span className="text-[var(--fg-3)]" aria-hidden="true">
             {' '}
             *
           </span>
@@ -46,7 +51,7 @@ export function Field({
       {children}
 
       {hint && !error && (
-        <p id={`${id}-hint`} className="mt-1.5 text-sm text-[var(--color-ink-muted)]">
+        <p id={`${id}-hint`} className="t-xs mt-2 text-[var(--fg-3)]">
           {hint}
         </p>
       )}
@@ -55,7 +60,7 @@ export function Field({
         <p
           id={`${id}-error`}
           role="alert"
-          className="mt-1.5 text-sm font-medium text-[var(--color-warn)]"
+          className="t-xs mt-2 font-medium text-[var(--color-danger)]"
         >
           {error}
         </p>
@@ -71,7 +76,7 @@ export function Input({
 }: React.InputHTMLAttributes<HTMLInputElement> & { invalid?: boolean }) {
   return (
     <input
-      className={clsx(CONTROL, invalid && 'border-[var(--color-warn)]', className)}
+      className={clsx(CONTROL, invalid && 'border-[var(--color-danger)]', className)}
       aria-invalid={invalid || undefined}
       {...props}
     />
@@ -88,7 +93,7 @@ export function Textarea({
       className={clsx(
         CONTROL,
         'min-h-28 resize-y',
-        invalid && 'border-[var(--color-warn)]',
+        invalid && 'border-[var(--color-danger)]',
         className,
       )}
       aria-invalid={invalid || undefined}
@@ -102,8 +107,7 @@ export function Textarea({
  *
  * Собственная отрисовка вместо нативной: нативный чекбокс в невыбранном
  * состоянии заливается белым, и на тёмной секции это выглядит как дырка
- * в вёрстке. Рамка берёт currentColor, поэтому контрол одинаково уместен
- * и на светлом, и на тёмном фоне.
+ * в вёрстке.
  */
 export function Consent({
   id,
@@ -119,9 +123,9 @@ export function Consent({
   return (
     <label
       htmlFor={id}
-      className="flex cursor-pointer items-start gap-3 text-sm text-[var(--color-ink-soft)]"
+      className="t-xs flex cursor-pointer items-start gap-3 text-[var(--fg-2)]"
     >
-      <span className="relative mt-0.5 inline-flex size-5 shrink-0">
+      <span className="relative mt-px inline-flex size-5 shrink-0">
         <input
           id={id}
           type="checkbox"
@@ -129,7 +133,8 @@ export function Consent({
           checked={checked}
           onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
           className={clsx(
-            'peer size-5 cursor-pointer appearance-none rounded-[5px] border-2 border-current/35 bg-transparent',
+            'peer size-5 cursor-pointer appearance-none rounded-[var(--radius-control)]',
+            'border border-[var(--hairline-strong)] bg-[var(--field-bg)]',
             'transition-colors duration-150',
             'checked:border-[var(--accent)] checked:bg-[var(--accent)]',
           )}
@@ -139,11 +144,11 @@ export function Consent({
           aria-hidden="true"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#14181B"
-          strokeWidth="3.4"
+          stroke="#ffffff"
+          strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="pointer-events-none absolute inset-0 m-auto size-3.5 opacity-0 peer-checked:opacity-100"
+          className="pointer-events-none absolute inset-0 m-auto size-3 opacity-0 peer-checked:opacity-100"
         >
           <path d="M5 13l4 4L19 7" />
         </svg>

@@ -2,26 +2,26 @@ import { Container } from './Container';
 import { Reveal } from './Reveal';
 import { clsx } from '@/lib/clsx';
 
-export type SectionTone = 'paper' | 'raised' | 'ink';
-
-const TONES: Record<SectionTone, string> = {
-  paper: 'bg-[var(--color-paper)] text-white',
-  raised: 'bg-[var(--color-ink-raised)] text-white',
-  // Тёмная секция — способ разбить длинную страницу без лишних рамок и теней.
-  ink: 'bg-[var(--color-ink)] text-white',
-};
+export type SectionTone = 'canvas' | 'sunken' | 'ink';
 
 /**
- * Секция лендинга: вертикальный ритм, заголовочный блок и появление при
- * скролле. Все блоки страницы собираются на ней, чтобы отступы и типографика
- * не расходились от секции к секции.
+ * Секция лендинга: вертикальный ритм, шапка блока и поверхность.
+ *
+ * Тон секции объявляется атрибутом data-surface, а не набором классов на
+ * каждом вложенном элементе: карточки, кнопки и формы внутри читают
+ * переменные поверхности и сами подстраиваются под светлый или тёмный фон.
+ *
+ * Тёмные секции расставлены осознанно и редко — первый экран, блок цены и
+ * финальный контакт. Они работают как архитектурные опоры страницы; если
+ * тёмным сделать всё, тон перестаёт что-либо значить.
  */
 export function Section({
   id,
-  tone = 'paper',
+  tone = 'canvas',
   eyebrow,
   title,
   lead,
+  aside,
   className,
   children,
 }: {
@@ -30,46 +30,36 @@ export function Section({
   eyebrow?: string;
   title?: string;
   lead?: string;
+  /** Короткая строка у правого края шапки секции — уточнение, не второй CTA. */
+  aside?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
 }) {
-  const isInk = tone === 'ink';
+  const hasHeader = Boolean(eyebrow || title || lead);
 
   return (
     <section
       id={id}
-      className={clsx(
-        'relative overflow-hidden py-(--spacing-section) lg:py-(--spacing-section-lg)',
-        TONES[tone],
-        className,
-      )}
+      data-surface={tone}
+      className={clsx('py-(--spacing-section) lg:py-(--spacing-section-lg)', className)}
     >
       <Container>
-        {(eyebrow || title || lead) && (
-          <Reveal className="mb-12 grid gap-5 border-t border-[var(--color-steel-line)] pt-5 lg:mb-20 lg:grid-cols-12 lg:gap-8">
-            {eyebrow && (
-              <p
-                className={clsx(
-                  'technical-label lg:col-span-3',
-                  isInk ? 'text-[var(--accent)]' : 'text-[var(--color-steel)]',
+        {hasHeader && (
+          <Reveal className="mb-10 lg:mb-16">
+            {/* Волосяная линия сверху — начало секции читается как разворот
+                каталога: линия, рубрика, заголовок. */}
+            <div className="border-t border-[var(--hairline)] pt-5 lg:pt-6">
+              <div className="grid gap-x-8 gap-y-4 lg:grid-cols-12">
+                {eyebrow && (
+                  <p className="t-label text-[var(--accent-fg)] lg:col-span-3">{eyebrow}</p>
                 )}
-              >
-                {'// '}
-                {eyebrow}
-              </p>
-            )}
-            <div className="lg:col-span-9">
-              {title && <h2 className="h-section max-w-5xl text-balance">{title}</h2>}
-              {lead && (
-                <p
-                  className={clsx(
-                    'measure mt-8 text-base sm:text-lg',
-                    isInk ? 'text-white/65' : 'text-[var(--color-ink-soft)]',
-                  )}
-                >
-                  {lead}
-                </p>
-              )}
+
+                <div className={clsx('lg:col-span-9', !eyebrow && 'lg:col-start-4')}>
+                  {title && <h2 className="t-h2 max-w-[22ch] text-balance">{title}</h2>}
+                  {lead && <p className="t-lead measure mt-5">{lead}</p>}
+                  {aside && <div className="mt-6">{aside}</div>}
+                </div>
+              </div>
             </div>
           </Reveal>
         )}

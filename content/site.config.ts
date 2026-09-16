@@ -27,7 +27,7 @@ export const site: SiteConfig = {
   },
 
   brand: {
-    accent: '#E0A33C',
+    accent: '#8f5433',
     logo: null,
     photoDir: '/media/demo',
   },

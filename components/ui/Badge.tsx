@@ -1,11 +1,14 @@
 import { clsx } from '@/lib/clsx';
 
-export type BadgeTone = 'neutral' | 'accent' | 'ink';
+export type BadgeTone = 'neutral' | 'accent';
 
+/**
+ * Служебная метка: источник отзыва, статус, короткий признак.
+ * Прямоугольная и тихая — бейдж не должен соревноваться с ценой или CTA.
+ */
 const TONES: Record<BadgeTone, string> = {
-  neutral: 'bg-transparent text-[var(--color-ink-soft)] border-[var(--color-steel-line)]',
-  accent: 'bg-[var(--accent)]/12 text-[var(--accent)] border-[var(--accent)]/35',
-  ink: 'bg-[var(--color-ink)] text-white border-transparent',
+  neutral: 'border-[var(--hairline-strong)] bg-transparent text-[var(--fg-2)]',
+  accent: 'border-transparent bg-[var(--color-accent-soft)] text-[var(--accent)]',
 };
 
 export function Badge({
@@ -20,7 +23,7 @@ export function Badge({
   return (
     <span
       className={clsx(
-        'technical-label inline-flex items-center gap-1.5 rounded-none border px-2.5 py-1',
+        't-label inline-flex items-center gap-1.5 rounded-[var(--radius-control)] border px-2.5 py-1.5',
         TONES[tone],
         className,
       )}

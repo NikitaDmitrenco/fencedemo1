@@ -2,8 +2,7 @@ import { clsx } from '@/lib/clsx';
 
 /**
  * Аккордеон на <details>/<summary>: нативная семантика, работа с клавиатуры
- * и поиск по странице — без единой строки JavaScript. Для блока FAQ, который
- * по ТЗ нужен на каждом сайте, это экономит бандл целиком.
+ * и поиск по странице — без единой строки JavaScript.
  */
 export function Accordion({
   className,
@@ -15,7 +14,7 @@ export function Accordion({
   return (
     <div
       className={clsx(
-        'divide-y divide-[var(--color-steel-line)] border-y border-[var(--color-steel-line)]',
+        'divide-y divide-[var(--hairline)] border-y border-[var(--hairline)]',
         className,
       )}
     >
@@ -26,18 +25,18 @@ export function Accordion({
 
 export function AccordionItem({ question, answer }: { question: string; answer: string }) {
   return (
-    <details className="group py-1">
+    <details className="group">
       <summary
         className={clsx(
-          'flex cursor-pointer list-none items-start justify-between gap-4 py-4',
-          'text-left text-lg font-semibold [&::-webkit-details-marker]:hidden',
+          'flex cursor-pointer list-none items-start justify-between gap-6 py-5',
+          'text-left [&::-webkit-details-marker]:hidden',
         )}
       >
-        <span className="text-[1.0625rem]">{question}</span>
+        <span className="t-h4">{question}</span>
 
         <span
           aria-hidden="true"
-          className="mt-0.5 shrink-0 text-[var(--color-steel)] transition-transform duration-200 ease-[var(--ease-out-soft)] group-open:rotate-45"
+          className="mt-0.5 shrink-0 text-[var(--fg-3)] transition-transform duration-200 ease-[var(--ease-out-soft)] group-open:rotate-45"
         >
           <svg
             width="20"
@@ -45,14 +44,14 @@ export function AccordionItem({ question, answer }: { question: string; answer: 
             viewBox="0 0 20 20"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.8"
+            strokeWidth="1.5"
           >
             <path d="M10 4v12M4 10h12" strokeLinecap="round" />
           </svg>
         </span>
       </summary>
 
-      <p className="measure pb-5 text-[var(--color-ink-soft)]">{answer}</p>
+      <p className="measure t-sm pb-6 text-[var(--fg-2)]">{answer}</p>
     </details>
   );
 }

@@ -6,3 +6,4 @@ export { Section } from './Section';
 export { Reveal } from './Reveal';
 export { Accordion, AccordionItem } from './Accordion';
 export { Field, Input, Textarea, Consent } from './Field';
+export { ProofIcon, ArrowRight, CheckIcon, PhoneIcon } from './Icon';

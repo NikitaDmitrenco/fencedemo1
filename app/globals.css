@@ -1,115 +1,294 @@
 @import 'tailwindcss';
 
+/* ═══════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM · «Точность и воздух»
+   ───────────────────────────────────────────────────────────────────────
+   Светлый архитектурный холст (воздух, доверие, ясность) + тёмные якорные
+   секции и строгая геометрия (инженерная точность). Один тёплый акцент
+   работает на CTA и навигацию по смыслу, а не на украшение.
+
+   Правила системы:
+   · ни одного случайного цвета — только токены ниже;
+   · два радиуса: 3 px у контролов, 4 px у поверхностей, 0 у full-bleed;
+   · одна тень на весь сайт — --shadow-lift, только у кликабельных карточек;
+   · типографика берётся из готовых классов .t-*, а не собирается на месте;
+   · отступы — только шаги шкалы Tailwind (кратные 4 px).
+   ═══════════════════════════════════════════════════════════════════════ */
+
 @theme {
-  --color-ink: #0b0e10;
-  --color-ink-raised: #12171a;
-  --color-ink-soft: #9da7aa;
-  --color-ink-muted: #697477;
-  --color-paper: #101416;
-  --color-paper-raised: #171d20;
-  --color-steel: #899397;
-  --color-steel-line: #2b3437;
-  --color-accent: #d7a94b;
-  --color-accent-strong: #e8ba57;
-  --color-accent-ink: #0b0e10;
-  --color-ok: #86b49b;
-  --color-warn: #ed947d;
+  /* ── Нейтральная основа ──────────────────────────────────────────────
+     Тёплый off-white вместо чистого белого: на большом поле чистый белый
+     выглядит стерильно и подсвечивает любую неровность фотографии. */
+  --color-canvas: #f7f6f3;
+  --color-surface: #ffffff;
+  --color-sunken: #efedE8;
+
+  /* Тёмные поверхности: не чёрные, а глубокий графит с холодным уходом. */
+  --color-ink: #15191b;
+  --color-ink-raised: #1e2427;
+  --color-ink-deep: #0f1315;
+
+  /* Текст на светлом */
+  --color-text: #15191b;
+  --color-text-2: #454d51;
+  --color-text-3: #737b80;
+
+  /* Линии на светлом */
+  --color-line: #e4e1db;
+  --color-line-strong: #cbc7bf;
+
+  /* ── Акцент ──────────────────────────────────────────────────────────
+     Бронза-медь: цвет порошковой окраски и металла, тёплый и сдержанный.
+     Не «строительный жёлтый» и не кричащий оранжевый. */
+  --color-accent: #8f5433;
+  --color-accent-strong: #79452a;
+  --color-accent-soft: #f3ece6;
+  /* На тёмном фоне бронза уходит в нечитаемое — светлый вариант для текста. */
+  --color-accent-light: #d19a71;
+
+  /* ── Семантика состояний ─────────────────────────────────────────────*/
+  --color-ok: #2f6b4f;
+  --color-danger: #a8321f;
+  --color-danger-light: #e9a196;
+
+  /* ── Типографика ─────────────────────────────────────────────────────*/
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-technical: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --radius-card: 2px;
-  --radius-control: 2px;
-  --spacing-section: 5rem;
-  --spacing-section-lg: 10rem;
+
+  /* ── Геометрия ───────────────────────────────────────────────────────*/
+  --radius-control: 3px;
+  --radius-surface: 4px;
+
+  /* ── Вертикальный ритм секций ────────────────────────────────────────*/
+  --spacing-section: 4.5rem;
+  --spacing-section-lg: 7.5rem;
+
   --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  /* Акцент клиента приходит из конфига через inline-style на <html>. */
   --accent: var(--color-accent);
+  --accent-strong: var(--color-accent-strong);
+  --accent-light: var(--color-accent-light);
+
+  /* Единственная тень системы: мягкий подъём кликабельной карточки. */
+  --shadow-lift:
+    0 1px 2px rgba(21, 25, 27, 0.05), 0 12px 28px -16px rgba(21, 25, 27, 0.28);
+
+  /* Ширина текстовой колонки */
+  --measure: 66ch;
+  --measure-tight: 46ch;
 }
 
-* {
-  border-color: var(--color-steel-line);
+/* ═══ Поверхности ═══════════════════════════════════════════════════════
+   Секция объявляет свою поверхность через data-surface, а компоненты внутри
+   читают --fg / --hairline / --surface-bg. Благодаря этому одна и та же
+   карточка, кнопка или форма выглядит системно и на светлом, и на тёмном —
+   без точечных переопределений с !important.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+[data-surface] {
+  color: var(--fg);
+  background-color: var(--surface-page);
 }
+
+[data-surface='canvas'] {
+  --surface-page: var(--color-canvas);
+  --fg: var(--color-text);
+  --fg-2: var(--color-text-2);
+  --fg-3: var(--color-text-3);
+  --hairline: var(--color-line);
+  --hairline-strong: var(--color-line-strong);
+  --surface-bg: var(--color-surface);
+  --surface-bg-quiet: var(--color-sunken);
+  --field-bg: var(--color-surface);
+  --accent-fg: var(--accent);
+}
+
+[data-surface='sunken'] {
+  --surface-page: var(--color-sunken);
+  --fg: var(--color-text);
+  --fg-2: var(--color-text-2);
+  --fg-3: var(--color-text-3);
+  --hairline: var(--color-line-strong);
+  --hairline-strong: #bfbab1;
+  --surface-bg: var(--color-surface);
+  --surface-bg-quiet: #e6e3dd;
+  --field-bg: var(--color-surface);
+  --accent-fg: var(--accent);
+}
+
+[data-surface='ink'] {
+  --surface-page: var(--color-ink);
+  --fg: #ffffff;
+  --fg-2: rgba(255, 255, 255, 0.68);
+  --fg-3: rgba(255, 255, 255, 0.48);
+  --hairline: rgba(255, 255, 255, 0.14);
+  --hairline-strong: rgba(255, 255, 255, 0.28);
+  --surface-bg: var(--color-ink-raised);
+  --surface-bg-quiet: #191f22;
+  --field-bg: rgba(255, 255, 255, 0.04);
+  --accent-fg: var(--accent-light);
+}
+
+/* Тёмная поверхность на «глубоком» фоне — для первого экрана и футера. */
+[data-surface='ink-deep'] {
+  --surface-page: var(--color-ink-deep);
+  --fg: #ffffff;
+  --fg-2: rgba(255, 255, 255, 0.68);
+  --fg-3: rgba(255, 255, 255, 0.48);
+  --hairline: rgba(255, 255, 255, 0.14);
+  --hairline-strong: rgba(255, 255, 255, 0.28);
+  --surface-bg: var(--color-ink-raised);
+  --surface-bg-quiet: #171c1f;
+  --field-bg: rgba(255, 255, 255, 0.04);
+  --accent-fg: var(--accent-light);
+}
+
+/* ═══ База документа ════════════════════════════════════════════════════ */
+
+* {
+  border-color: var(--hairline, var(--color-line));
+}
+
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
-  background: var(--color-ink);
+  /* Высота шапки + запас, чтобы якорь не уезжал под неё. */
+  scroll-padding-top: 6rem;
+  background: var(--color-canvas);
 }
+
 body {
-  background: var(--color-ink);
-  color: #f2f0eb;
+  background: var(--color-canvas);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--color-accent-ink);
-}
-
-.h-display {
-  font-size: clamp(3rem, 1.7rem + 6.25vw, 8.25rem);
-  line-height: 0.91;
-  letter-spacing: -0.065em;
-  font-weight: 700;
-}
-.h-section {
-  font-size: clamp(2.15rem, 1.45rem + 3vw, 4.5rem);
-  line-height: 1.03;
-  letter-spacing: -0.055em;
-  font-weight: 700;
-}
-.measure {
-  max-width: 62ch;
-}
-.technical-label {
-  font-family: var(--font-technical);
-  font-size: 0.66rem;
-  line-height: 1.35;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.editorial-rule {
-  height: 1px;
-  background: var(--color-steel-line);
+  color: #ffffff;
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 4px;
-  border-radius: 0;
+  outline-offset: 3px;
+  border-radius: 1px;
 }
+
+[data-surface='ink'] :focus-visible,
+[data-surface='ink-deep'] :focus-visible {
+  outline-color: var(--accent-light);
+}
+
+/* ═══ Типографическая шкала ═════════════════════════════════════════════
+   Пять ступеней заголовков и три ступени текста. Больше ступеней не нужно —
+   лишние размеры это и есть «случайные значения».
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.t-display {
+  font-size: clamp(2.625rem, 1.55rem + 4.3vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+.t-h2 {
+  font-size: clamp(1.875rem, 1.35rem + 1.9vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.t-h3 {
+  font-size: clamp(1.3125rem, 1.18rem + 0.55vw, 1.625rem);
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+}
+
+.t-h4 {
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  letter-spacing: -0.012em;
+  font-weight: 700;
+}
+
+/* Крупные числа: показатели компании, цены объектов. */
+.t-metric {
+  font-size: clamp(2.5rem, 1.9rem + 2.2vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-lead {
+  font-size: clamp(1.0625rem, 1.01rem + 0.28vw, 1.1875rem);
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--fg-2, var(--color-text-2));
+}
+
+.t-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.t-sm {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.t-xs {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+/* Технический ярлык: моноширинный, разряженный. Отвечает за ощущение
+   инженерной точности — рубрики секций, номера шагов, подписи параметров. */
+.t-label {
+  font-family: var(--font-technical);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+.measure-tight {
+  max-width: var(--measure-tight);
+}
+
+/* ═══ Появление при скролле ═════════════════════════════════════════════ */
 
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(12px);
   transition:
-    opacity 550ms var(--ease-out-soft),
-    transform 550ms var(--ease-out-soft);
+    opacity 520ms var(--ease-out-soft),
+    transform 520ms var(--ease-out-soft);
 }
+
 .reveal[data-visible='true'] {
   opacity: 1;
   transform: none;
-}
-
-@media (max-width: 640px) {
-  .h-display {
-    font-size: clamp(3.1rem, 12vw, 4.6rem);
-    line-height: 0.94;
-  }
-  .h-section {
-    font-size: clamp(2.25rem, 9.5vw, 3.3rem);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+
   *,
   *::before,
   *::after {
@@ -117,6 +296,7 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
   .reveal {
     opacity: 1;
     transform: none;
