@@ -9,7 +9,7 @@
  * «по телефону сказали одно, на месте стало вдвое дороже») и одновременно
  * защита компании от обязательства по цене, названной без замера.
  */
-
+//
 import type { ProductSlug } from './types';
 
 export type FenceType = ProductSlug | 'komplekt' | 'tolko-vorota';
