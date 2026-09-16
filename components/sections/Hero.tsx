@@ -4,77 +4,91 @@ import { ButtonLink } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { ProofIcon } from '@/components/ui/Icon';
 import { CALC_ANCHOR } from '@/lib/nav';
+import { clsx } from '@/lib/clsx';
 
 /**
  * Блок 1. За 5–10 секунд объяснить продукт и дать путь к расчёту.
  *
  * Фотография грузится с priority — это LCP-элемент страницы, и откладывать
  * его загрузку значит портить главную метрику скорости на мобильном.
+ *
+ * Верхний отступ считается от высоты фиксированной шапки плюс safe-area:
+ * шапка лежит поверх экрана, и без этой поправки на телефонах с вырезом
+ * первая строка заголовка уходит под неё.
  */
 export function Hero() {
   const { hero } = site;
 
   return (
     <section
-      className="relative flex min-h-[92svh] items-end overflow-hidden bg-[var(--color-ink)] pt-28 pb-10 text-white lg:min-h-[100svh] lg:pb-12"
-      style={{
-        backgroundImage: `url(${hero.image})`,
-        backgroundPosition: '63% center',
-        backgroundSize: 'cover',
-      }}
+      data-surface="ink-deep"
+      className={clsx(
+        'relative flex min-h-svh flex-col justify-end overflow-hidden bg-[var(--color-ink-deep)]',
+        'pt-[calc(6rem+env(safe-area-inset-top,0px))] pb-16',
+        'lg:pt-[calc(8rem+env(safe-area-inset-top,0px))] lg:pb-20',
+      )}
     >
+      {/* Кадр задаётся только через next/image: дублирующий background-image
+          на секции грузил бы тот же файл вторым, неоптимизированным запросом.
+          Сдвиг фокуса вправо — чтобы на узком экране в кадр попадало полотно
+          забора с ребром и столбом, а не пустая створка ворот. */}
       <Image
         src={hero.image}
         alt={hero.imageAlt}
         fill
         priority
         sizes="100vw"
-        className="z-0 object-cover object-[63%_center] saturate-[.72] contrast-[1.06]"
+        className="z-0 object-cover object-[66%_center] sm:object-[63%_center]"
       />
 
-      {/* Затемнение снизу: текст должен читаться на любом кадре, который
-          подставит клиент, а не только на демонстрационном. */}
+      {/* Функциональная маска, а не декоративный слой: один градиент из цвета
+          поверхности, плотный слева снизу (там текст) и прозрачный справа
+          сверху (там фактура металла). Читаемость держится на нём, поэтому
+          клиент может подставить любой свой кадр, не трогая вёрстку. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 z-10"
         style={{
-          background:
-            'linear-gradient(90deg, rgba(8,11,12,0.86) 0%, rgba(8,11,12,0.48) 47%, rgba(8,11,12,0.08) 100%), linear-gradient(0deg, rgba(8,11,12,0.8) 0%, rgba(8,11,12,0.08) 62%)',
+          background: `linear-gradient(to top right,
+            color-mix(in srgb, var(--color-ink-deep) 94%, transparent) 0%,
+            color-mix(in srgb, var(--color-ink-deep) 74%, transparent) 38%,
+            color-mix(in srgb, var(--color-ink-deep) 30%, transparent) 72%,
+            transparent 100%)`,
         }}
       />
 
       <Container className="relative z-20">
         <div className="grid lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-9">
-            <p className="technical-label mb-6 text-[var(--accent)]">
-              Digital craft for the physical world
-            </p>
-            <h1 className="h-display max-w-5xl text-balance">{hero.title}</h1>
-            <p className="measure mt-7 text-base text-white/70 lg:text-xl">{hero.subtitle}</p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={CALC_ANCHOR} size="lg">
+          <div className="lg:col-span-8">
+            <h1 className="t-display text-balance">{hero.title}</h1>
+            <p className="t-lead measure mt-6">{hero.subtitle}</p>
+
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href={CALC_ANCHOR} size="lg" className="w-full sm:w-auto">
                 Рассчитать стоимость
               </ButtonLink>
-              <ButtonLink href="#cases" variant="ghost" size="lg">
+              <ButtonLink href="#cases" variant="secondary" size="lg" className="w-full sm:w-auto">
                 Посмотреть работы
               </ButtonLink>
             </div>
           </div>
-          <div className="hidden justify-end lg:col-span-3 lg:flex lg:items-end">
-            <p className="technical-label max-w-28 border-l border-white/30 pl-4 text-white/50">
-              Проектирование, изготовление и монтаж в одной системе
-            </p>
-          </div>
         </div>
-        <ul className="mt-14 grid gap-x-8 gap-y-5 border-t border-white/20 pt-5 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4">
+
+        {/* Строка доказательств, а не список преимуществ: волосяная линия
+            сверху и разделители между колонками делают из неё таблицу
+            характеристик компании — так её и читают, по одному факту. */}
+        <ul className="mt-16 grid gap-x-8 gap-y-6 border-t border-[var(--hairline)] pt-6 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-y-0">
           {hero.proofs.map((proof) => (
-            <li key={proof.title} className="flex gap-3 lg:border-l lg:border-white/18 lg:pl-5">
-              <span className="mt-0.5 shrink-0 text-[var(--accent)]">
+            <li
+              key={proof.title}
+              className="flex gap-3 lg:border-l lg:border-[var(--hairline)] lg:pl-6 lg:first:border-l-0 lg:first:pl-0"
+            >
+              <span className="shrink-0 text-[var(--accent-fg)]">
                 <ProofIcon name={proof.icon} />
               </span>
-              <span>
-                <span className="block text-sm font-bold">{proof.title}</span>
-                <span className="mt-0.5 block text-sm text-white/60">{proof.note}</span>
+              <span className="block">
+                <span className="t-sm block font-semibold">{proof.title}</span>
+                <span className="t-xs mt-1 block text-[var(--fg-2)]">{proof.note}</span>
               </span>
             </li>
           ))}

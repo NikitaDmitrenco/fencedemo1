@@ -12,6 +12,11 @@ import { formatRub } from '@/content/pricing';
  * Карточка продаёт выбор, а не является техсправочником: одна строка пользы,
  * цена «от» и переход к расчёту.
  *
+ * Сетка ровная: все пять решений — равноправные варианты одной системы, и
+ * выделять одно из них размером значило бы подсказывать выбор без причины.
+ * Различает материал фотография, поэтому у всех карточек она одинаково
+ * крупная и в одной пропорции.
+ *
  * Тип решения передаётся параметром запроса, а не в самом якоре: `#calc?type=x`
  * сделал бы фрагментом строку «calc?type=x», и переход к блоку расчёта просто
  * не сработал бы. Квиз читает параметр на Э3 и открывается с уже выбранным
@@ -21,60 +26,50 @@ export function Catalog() {
   return (
     <Section
       id="catalog"
+      tone="sunken"
       eyebrow="Решения"
       title="Что мы ставим"
       lead="Цены указаны за метр погонный с материалом и монтажом. Точная стоимость зависит от высоты, рельефа участка и типа ворот."
     >
-      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
+      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
         {site.products.map((product, i) => (
-          <Reveal
-            key={product.slug}
-            as="li"
-            delay={i * 60}
-            className={`h-full ${i === 0 ? 'sm:col-span-2 lg:col-span-7' : i === 1 ? 'lg:col-span-5' : i === 2 ? 'lg:col-span-4' : 'lg:col-span-4'}`}
-          >
-            <Card interactive className="flex h-full flex-col overflow-hidden">
+          <Reveal key={product.slug} as="li" delay={i * 60} className="h-full">
+            <Card interactive className="group flex h-full flex-col overflow-hidden">
               <Link href={`/?type=${product.slug}#calc` as Route} className="flex h-full flex-col">
-                <div
-                  className={`relative w-full bg-[var(--color-ink)] ${i === 0 ? 'aspect-16/8' : 'aspect-4/3'}`}
-                >
+                <div className="relative aspect-4/3 w-full bg-[var(--color-ink-raised)]">
                   <Image
                     src={product.image}
                     alt={product.title}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    sizes="(min-width: 1280px) 420px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover"
                   />
                 </div>
 
                 <div className="flex flex-1 flex-col p-5 lg:p-6">
-                  <span className="technical-label text-[var(--accent)]">
-                    {String(i + 1).padStart(2, '0')} / Решение
-                  </span>
-                  <h3 className="mt-5 text-2xl font-bold tracking-tight">{product.title}</h3>
+                  <h3 className="t-h3 text-balance">{product.title}</h3>
+                  <p className="t-sm mt-3 flex-1 text-[var(--fg-2)]">{product.benefit}</p>
 
-                  <p className="mt-2 flex-1 text-[0.9375rem] text-[var(--color-ink-soft)]">
-                    {product.benefit}
-                  </p>
-
-                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-[var(--color-steel-line)] pt-4">
+                  {/* Цена — то, ради чего сюда смотрят, поэтому она держит
+                      вес заголовка, а «Рассчитать» уходит в технический
+                      ярлык: два одинаково громких элемента в одной строке
+                      заставляли бы выбирать, куда смотреть. */}
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-[var(--hairline)] pt-4">
                     {product.priceFrom !== null ? (
-                      <span className="font-bold">
+                      <p className="t-h4">
                         от {formatRub(product.priceFrom)}
-                        <span className="font-medium text-[var(--color-ink-muted)]">
+                        <span className="t-sm font-medium text-[var(--fg-3)]">
                           {' / '}
                           {product.priceUnit}
                         </span>
-                      </span>
+                      </p>
                     ) : (
-                      <span className="font-semibold text-[var(--color-ink-muted)]">
-                        цена по расчёту
-                      </span>
+                      <p className="t-h4 text-[var(--fg-2)]">цена по расчёту</p>
                     )}
 
-                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-white">
+                    <span className="t-label inline-flex items-center gap-2 text-[var(--fg-3)] transition-colors duration-200 ease-[var(--ease-out-soft)] group-hover:text-[var(--accent-fg)]">
                       Рассчитать
-                      <ArrowRight />
+                      <ArrowRight size={16} />
                     </span>
                   </div>
                 </div>
