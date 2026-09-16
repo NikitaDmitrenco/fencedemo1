@@ -170,12 +170,7 @@ export function Quiz() {
         </span>
       </div>
 
-      <p
-        ref={headingRef}
-        tabIndex={-1}
-        aria-live="polite"
-        className="t-h3 mt-6 outline-none"
-      >
+      <p ref={headingRef} tabIndex={-1} aria-live="polite" className="t-h3 mt-6 outline-none">
         {STEP_TITLES[step]}
       </p>
 

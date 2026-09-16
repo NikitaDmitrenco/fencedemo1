@@ -22,8 +22,8 @@ const VARIANTS: Record<ButtonVariant, string> = {
 
 const SIZES: Record<ButtonSize, string> = {
   // Тап-таргет не меньше 48 px — требование доступности из ТЗ.
-  md: 'min-h-12 px-5 text-[0.9375rem]',
-  lg: 'min-h-14 px-7 text-base',
+  md: 't-sm min-h-12 px-5',
+  lg: 't-body min-h-14 px-8',
 };
 
 export function buttonClass(

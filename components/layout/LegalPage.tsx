@@ -44,9 +44,7 @@ export function LegalPage({
             </p>
           ) : null}
 
-          <div className="t-body mt-10 space-y-5 text-[var(--fg-2)] [&_h2]:mt-10 [&_h2]:border-t [&_h2]:border-[var(--hairline)] [&_h2]:pt-5 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-[var(--fg)] [&_li]:mt-2 [&_ul]:list-disc [&_ul]:pl-5">
-            {children}
-          </div>
+          <div className="legal-copy t-body mt-10 space-y-5 text-[var(--fg-2)]">{children}</div>
         </div>
       </Container>
     </main>

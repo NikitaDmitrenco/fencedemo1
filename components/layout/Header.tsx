@@ -46,23 +46,18 @@ export function Header() {
         className={clsx(
           'fixed inset-x-0 top-0 z-50 border-b',
           'transition-colors duration-300 ease-[var(--ease-out-soft)]',
+          scrolled
+            ? 'border-[var(--hairline)] bg-[var(--color-canvas)]'
+            : 'border-transparent bg-transparent',
         )}
-        style={{
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          // Фон и линия задаются инлайном намеренно: правило [data-surface]
-          // в globals.css лежит вне слоёв Tailwind и потому перебивает любую
-          // утилиту bg-*/border-* на том же узле. Прозрачность первого
-          // состояния иначе просто не применилась бы.
-          backgroundColor: scrolled ? 'var(--color-canvas)' : 'transparent',
-          borderBottomColor: scrolled ? 'var(--hairline)' : 'transparent',
-        }}
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       >
         <Container className="flex h-16 items-center justify-between gap-6">
           <a href="#top" className="t-h4 transition-colors">
             {site.company.name}
           </a>
 
-          <nav aria-label="Разделы страницы" className="hidden items-center gap-7 lg:flex">
+          <nav aria-label="Разделы страницы" className="hidden items-center gap-8 lg:flex">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}

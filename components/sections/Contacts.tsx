@@ -58,20 +58,20 @@ export function Contacts() {
 
           <dl className="mt-10 space-y-5 border-t border-[var(--hairline)] pt-8">
             <div>
-              <dt className="t-xs text-[var(--fg-3)]">География работ</dt>
-              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg)]">{company.geo}</dd>
+              <dt className="t-label text-[var(--fg-3)]">География работ</dt>
+              <dd className="t-sm mt-2 font-semibold text-[var(--fg)]">{company.geo}</dd>
             </div>
             <div>
-              <dt className="t-xs text-[var(--fg-3)]">Адрес</dt>
-              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg)]">{company.address}</dd>
+              <dt className="t-label text-[var(--fg-3)]">Адрес</dt>
+              <dd className="t-sm mt-2 font-semibold text-[var(--fg)]">{company.address}</dd>
             </div>
             <div>
-              <dt className="t-xs text-[var(--fg-3)]">Время работы</dt>
-              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg)]">{company.workHours}</dd>
+              <dt className="t-label text-[var(--fg-3)]">Время работы</dt>
+              <dd className="t-sm mt-2 font-semibold text-[var(--fg)]">{company.workHours}</dd>
             </div>
             <div>
-              <dt className="t-xs text-[var(--fg-3)]">Реквизиты</dt>
-              <dd className="t-sm mt-1.5 font-semibold text-[var(--fg-2)]">{legal.requisites}</dd>
+              <dt className="t-label text-[var(--fg-3)]">Реквизиты</dt>
+              <dd className="t-sm mt-2 font-semibold text-[var(--fg-2)]">{legal.requisites}</dd>
             </div>
           </dl>
         </Reveal>
