@@ -38,24 +38,12 @@ export function Hero() {
         fill
         priority
         sizes="100vw"
-        className="z-0 object-cover object-[66%_center] sm:object-[63%_center]"
+        className="z-0 object-cover object-[46%_center] sm:object-[63%_center]"
       />
 
-      {/* Функциональная маска, а не декоративный слой: один градиент из цвета
-          поверхности, плотный слева снизу (там текст) и прозрачный справа
-          сверху (там фактура металла). Читаемость держится на нём, поэтому
-          клиент может подставить любой свой кадр, не трогая вёрстку. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-10"
-        style={{
-          background: `linear-gradient(to top right,
-            color-mix(in srgb, var(--color-ink-deep) 94%, transparent) 0%,
-            color-mix(in srgb, var(--color-ink-deep) 74%, transparent) 38%,
-            color-mix(in srgb, var(--color-ink-deep) 30%, transparent) 72%,
-            transparent 100%)`,
-        }}
-      />
+      {/* Маска читаемости — .hero-scrim в globals.css. Она же позволяет
+          клиенту подставить любой свой кадр, не трогая вёрстку. */}
+      <div aria-hidden="true" className="hero-scrim absolute inset-0 z-10" />
 
       <Container className="relative z-20">
         <div className="grid lg:grid-cols-12 lg:gap-8">

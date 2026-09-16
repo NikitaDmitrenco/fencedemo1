@@ -287,6 +287,46 @@
     margin-top: 0.5rem;
   }
 
+  /* Маска читаемости первого экрана.
+     Не декоративный слой: затемняет ровно те зоны, где лежит текст, и
+     оставляет кадр открытым там, где он работает на продукт. Живёт здесь,
+     а не инлайном в компоненте, потому что на узком экране текст занимает
+     почти весь кадр и защищать его нужно иначе — а инлайн-стиль не умеет
+     в контрольные точки. */
+  .hero-scrim {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-ink-deep) 78%, transparent) 0%,
+      color-mix(in srgb, var(--color-ink-deep) 46%, transparent) 10%,
+      color-mix(in srgb, var(--color-ink-deep) 26%, transparent) 34%,
+      color-mix(in srgb, var(--color-ink-deep) 56%, transparent) 66%,
+      color-mix(in srgb, var(--color-ink-deep) 90%, transparent) 100%
+    );
+  }
+
+  @media (min-width: 640px) {
+    /* На широком экране текст уходит влево и вниз, а правая часть кадра
+       освобождается под ворота — там маска почти не нужна. */
+    .hero-scrim {
+      background:
+        linear-gradient(
+          to bottom,
+          color-mix(in srgb, var(--color-ink-deep) 80%, transparent) 0%,
+          color-mix(in srgb, var(--color-ink-deep) 38%, transparent) 9%,
+          color-mix(in srgb, var(--color-ink-deep) 12%, transparent) 22%,
+          transparent 38%,
+          color-mix(in srgb, var(--color-ink-deep) 52%, transparent) 70%,
+          color-mix(in srgb, var(--color-ink-deep) 90%, transparent) 100%
+        ),
+        linear-gradient(
+          to right,
+          color-mix(in srgb, var(--color-ink-deep) 64%, transparent) 0%,
+          color-mix(in srgb, var(--color-ink-deep) 20%, transparent) 44%,
+          transparent 68%
+        );
+    }
+  }
+
   .measure {
     max-width: var(--measure);
   }

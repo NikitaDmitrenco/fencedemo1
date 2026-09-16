@@ -135,13 +135,13 @@ const spanH = (q) => (q.bl - q.tl + (q.br - q.tr)) / 2;
 function profnastil(q, px) {
   const c = cellOf(q);
   const n = Math.max(3, Math.round(q.w / (54 * px)));
-  let out = c(0, 1, 0, 1, 'url(#steel)');
+  let out = c(0, 1, 0, 1, 'url(#panel)');
   for (let i = 0; i < n; i++) {
     const u = i / n;
     const d = 1 / n;
-    out += c(u + d * 0.05, u + d * 0.36, 0, 1, '#ffffff', 0.17);
-    out += c(u + d * 0.54, u + d * 0.86, 0, 1, INK, 0.19);
-    out += c(u + d * 0.86, u + d * 0.94, 0, 1, '#ffffff', 0.08);
+    out += c(u + d * 0.05, u + d * 0.36, 0, 1, '#ffffff', 0.15);
+    out += c(u + d * 0.54, u + d * 0.86, 0, 1, INK, 0.22);
+    out += c(u + d * 0.86, u + d * 0.94, 0, 1, '#ffffff', 0.07);
   }
   // П-планка по верху: тонкая светлая кромка отделяет полотно от неба
   out += c(0, 1, -0.014, 0.014, STEEL_HI, 0.9);
@@ -172,7 +172,7 @@ function evroshtaketnik(q, px) {
     const cx = (u1 - u0) * 0.3;
     out += poly(
       [p(u0, ch), p(u0 + cx, 0), p(u1 - cx, 0), p(u1, ch), p(u1, 1), p(u0, 1)],
-      'url(#steel)',
+      'url(#panel)',
     );
     out += c(u0, u0 + (u1 - u0) * 0.22, ch, 1, '#ffffff', 0.15);
     out += c(u1 - (u1 - u0) * 0.24, u1, ch, 1, INK, 0.2);
@@ -196,15 +196,15 @@ function mesh(q, px) {
   let out = c(0, 1, 0, 1, INK, 0.05); // двор за сеткой чуть глубже в тени
   for (let j = 1; j < nh; j++) {
     const v = j / nh;
-    out += c(0, 1, v - wv / 2, v + wv / 2, STEEL_LO, 0.9);
+    out += c(0, 1, v - wv / 2, v + wv / 2, STEEL_DEEP, 0.92);
   }
   for (let i = 1; i < nv; i++) {
     const u = i / nv;
-    out += c(u - wu / 2, u + wu / 2, 0, 1, STEEL_LO, 0.95);
-    out += c(u - wu / 2, u - wu / 6, 0, 1, STEEL_HI, 0.75);
+    out += c(u - wu / 2, u + wu / 2, 0, 1, STEEL_DEEP, 0.95);
+    out += c(u - wu / 2, u - wu / 5, 0, 1, STEEL_HI, 0.7);
   }
   for (const v of [0.3, 0.63]) {
-    out += c(0, 1, v - wv * 2, v - wv * 0.4, STEEL_HI, 0.95);
+    out += c(0, 1, v - wv * 2, v - wv * 0.4, STEEL, 0.9);
     out += c(0, 1, v - wv * 0.4, v + wv * 2, STEEL_DEEP, 0.95);
   }
   out += c(0, 1, 0, wv * 1.3, STEEL_LO, 0.9);
@@ -220,14 +220,14 @@ function mesh(q, px) {
 function zhalyuzi(q, px) {
   const c = cellOf(q);
   const H = spanH(q);
-  const n = Math.max(7, Math.round(H / (31 * px)));
-  let out = c(0, 1, 0, 1, INK, 0.08);
+  const n = Math.max(5, Math.round(H / (46 * px)));
+  let out = c(0, 1, 0, 1, INK, 0.1);
   for (let i = 0; i < n; i++) {
     const v = i / n;
     const d = 1 / n;
-    out += c(0, 1, v, v + d * 0.8, 'url(#steel)');
-    out += c(0, 1, v, v + d * 0.2, '#ffffff', 0.18);
-    out += c(0, 1, v + d * 0.63, v + d * 0.8, INK, 0.27);
+    out += c(0, 1, v, v + d * 0.78, 'url(#panel)');
+    out += c(0, 1, v, v + d * 0.22, '#ffffff', 0.22);
+    out += c(0, 1, v + d * 0.6, v + d * 0.78, INK, 0.3);
   }
   // боковые стойки, в которые заведены торцы ламелей
   out += c(0, 0.04, -0.012, 1, 'url(#post)');
@@ -242,29 +242,18 @@ const materialOf = (type) => MATERIALS[type] ?? profnastil;
 
 /** Контактная тень: без неё конструкция висит в воздухе, а не стоит на земле. */
 function contact(q, px) {
-  const d = 13 * px;
-  return (
+  const band = (d, o) =>
     poly(
       [
         [q.x, q.bl],
         [q.x + q.w, q.br],
-        [q.x + q.w, q.br + d * 3],
-        [q.x, q.bl + d * 3],
+        [q.x + q.w - d * 0.8, q.br + d],
+        [q.x - d * 0.8, q.bl + d],
       ],
       INK,
-      0.09,
-    ) +
-    poly(
-      [
-        [q.x, q.bl],
-        [q.x + q.w, q.br],
-        [q.x + q.w, q.br + d],
-        [q.x, q.bl + d],
-      ],
-      INK,
-      0.24,
-    )
-  );
+      o,
+    );
+  return band(34 * px, 0.05) + band(17 * px, 0.08) + band(7 * px, 0.13);
 }
 
 /** Столб с крышкой: крышка — видимый признак аккуратного монтажа. */
@@ -328,8 +317,8 @@ function apron(x, w, yBase, h) {
     [
       [x, yBase],
       [x + w, yBase],
-      [x + w + w * 0.18, h],
-      [x - w * 0.18, h],
+      [x + w + w * 0.07, h],
+      [x - w * 0.07, h],
     ],
     PAVE,
     0.9,
@@ -343,7 +332,7 @@ function apron(x, w, yBase, h) {
  */
 function slidingGate(type, { x, y, w, h }, s) {
   const draw = materialOf(type);
-  const fr = 11 * s;
+  const fr = 15 * s;
   const beam = 26 * s;
   const by = y + h;
   const q = {
@@ -391,7 +380,7 @@ function slidingGate(type, { x, y, w, h }, s) {
  */
 function swingGate(type, { x, y, w, h, leaves = 2 }, s) {
   const draw = materialOf(type);
-  const fr = 11 * s;
+  const fr = 15 * s;
   const gap = 5 * s;
   const lw = (w - gap * (leaves - 1)) / leaves;
   let out = '';
@@ -446,6 +435,11 @@ function defs() {
     <stop offset="0.44" stop-color="${STEEL}"/>
     <stop offset="1" stop-color="${STEEL_LO}"/>
   </linearGradient>
+  <linearGradient id="panel" x1="0" y1="0" x2="0.06" y2="1">
+    <stop offset="0" stop-color="${STEEL}"/>
+    <stop offset="0.55" stop-color="#7a848a"/>
+    <stop offset="1" stop-color="${STEEL_LO}"/>
+  </linearGradient>
   <linearGradient id="post" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="#5b6468"/>
     <stop offset="0.38" stop-color="${POST}"/>
@@ -484,7 +478,7 @@ function skyline(w, hz, s, rnd) {
       ],
       HAZE,
     );
-  return `<g opacity="0.5">${band}</g><g opacity="0.62">${house}</g>`;
+  return `<g opacity="0.42">${band}</g><g opacity="0.5">${house}</g>`;
 }
 
 /** Общая оболочка кадра: небо, дальний план, горизонт, газон, лёгкий спад к краям. */
@@ -512,18 +506,18 @@ ${rect(0, 0, w, h, 'url(#edge)')}
  */
 export function hero({ w, h, type = 'profnastil', seed = 11 }) {
   const s = h / 900;
-  const hz = h * 0.47;
+  const hz = h * 0.468;
   const xNear = w * 0.58;
-  const sh = shot({ x0: xNear, yTop: h * 0.29, yBase: h * 0.84, vx: -w * 1.15, vy: hz });
+  const sh = shot({ x0: xNear, yTop: h * 0.38, yBase: h * 0.82, vx: -w * 0.62, vy: hz });
   const gx = w * 0.6;
-  const gw = w * 0.3;
+  const gw = w * 0.28;
   const gc = gx + gw / 2;
   const gs = s * sh.scale(gc);
   const gy = sh.top(gc) - 14 * gs;
   const gh = sh.base(gc) - gy;
 
   const body =
-    run(type, { sh, x0: xNear, x1: -w * 0.05, spans: 5, ratio: 0.84 }, s) +
+    run(type, { sh, x0: xNear, x1: -w * 0.05, spans: 8, ratio: 0.84 }, s) +
     apron(gx - w * 0.04, gw + w * 0.16, sh.base(gc), h) +
     slidingGate(type, { x: gx, y: gy, w: gw, h: gh }, gs) +
     run(type, { sh, x0: gx + gw + 70 * gs, x1: w * 1.06, spans: 1 }, s);
@@ -601,14 +595,21 @@ export function object({ w, h, type, seed, spans = 4, angle = 'right', step = 0,
 
 /* ─── Крупные планы узлов ─────────────────────────────────────────────── */
 
-/** Сварной шов: ряд валиков по стыку. Прямое доказательство ручной работы. */
+/** Сварной шов: ряд валиков по стыку — прямое доказательство ручной работы. */
 function weld(x0, y0, x1, y1, px) {
-  const n = Math.max(3, Math.round(Math.hypot(x1 - x0, y1 - y0) / (7 * px)));
+  const len = Math.max(1, Math.hypot(x1 - x0, y1 - y0));
+  const r = 6.5 * px;
+  const n = Math.max(3, Math.round(len / (r * 1.3)));
+  const nx = -(y1 - y0) / len;
+  const ny = (x1 - x0) / len;
   let out = '';
   for (let i = 0; i <= n; i++) {
     const t = i / n;
-    out += circ(lerp(x0, x1, t), lerp(y0, y1, t), 5 * px, STEEL_HI, 0.55);
-    out += circ(lerp(x0, x1, t), lerp(y0, y1, t) + 1.6 * px, 3.4 * px, INK, 0.2);
+    const cx = lerp(x0, x1, t);
+    const cy = lerp(y0, y1, t);
+    out += circ(cx, cy, r, STEEL_LO);
+    out += circ(cx - nx * r * 0.34, cy - ny * r * 0.34, r * 0.55, STEEL_HI, 0.5);
+    out += circ(cx + nx * r * 0.42, cy + ny * r * 0.42, r * 0.5, INK, 0.28);
   }
   return out;
 }
@@ -621,16 +622,21 @@ function bolt(cx, cy, r) {
   );
 }
 
-/** Расфокусированный задний план: широкие полосы низкого контраста. */
+/**
+ * Расфокусированный второй план. На крупном плане резкой должна быть только
+ * конструкция — большие мягкие массы за ней читаются как малая глубина
+ * резкости и удерживают взгляд на узле.
+ */
 function softBack(w, h, hz, s, rnd) {
-  let out = '';
-  let x = -w * 0.1;
+  const y = hz - h * 0.38;
+  let out = rect(0, y, w, h * 0.38, STEEL_LO, 0.09);
+  let x = -w * 0.25;
   while (x < w * 1.1) {
-    const bw = w * (0.06 + rnd() * 0.1);
-    out += rect(x, hz - h * 0.3, bw, h * 0.3, STEEL_LO, 0.1 + rnd() * 0.08);
-    x += bw * 1.5;
+    const bw = w * (0.3 + rnd() * 0.35);
+    out += rect(x, y + h * 0.07 * rnd(), bw, h * 0.42, STEEL_LO, 0.035);
+    x += bw * 0.8;
   }
-  return out;
+  return out + rect(0, hz, w, h * 0.18, INK, 0.05);
 }
 
 /**
@@ -647,57 +653,75 @@ export function detail({ w, h, kind, type = 'profnastil', seed = 1 }) {
   const rnd = rng(seed + 99);
   const draw = materialOf(type);
 
-  if (kind === 'roller') {
-    // Ролики и направляющая откатных ворот — узел, который определяет,
-    // будут ли ворота ходить через пять лет.
-    const hz = h * 0.26;
-    const beamY = h * 0.34;
-    const beamH = h * 0.13;
-    const body =
+  if (kind === 'post-rail') {
+    // Столб, крышка, крепление лаги и шов по стыку. Заказчик не умеет читать
+    // сечения — он смотрит на этот узел и решает, аккуратно ли работают.
+    const hz = h * 0.56;
+    const px = s * 2.2;
+    const pxL = w * 0.27;
+    const pwd = w * 0.17;
+    const sheetX = pxL + pwd * 0.55;
+    let body =
       softBack(w, h, hz, s, rnd) +
-      apron(-w * 0.2, w * 1.4, h * 0.6, h) +
-      draw({ x: -w * 0.05, w: w * 1.1, tl: -h * 0.3, tr: -h * 0.3, bl: beamY, br: beamY }, s * 2.1) +
-      rect(-w * 0.05, beamY, w * 1.1, beamH, 'url(#post)') +
-      rect(-w * 0.05, beamY, w * 1.1, beamH * 0.16, STEEL_HI, 0.4) +
-      rect(-w * 0.05, beamY + beamH * 0.62, w * 1.1, beamH * 0.22, INK, 0.4) +
-      rect(w * 0.16, h * 0.6, w * 0.54, h * 0.1, INK, 0.16) +
-      rect(w * 0.18, h * 0.58, w * 0.5, h * 0.09, PAVE) +
-      rect(w * 0.18, h * 0.58, w * 0.5, h * 0.012, STEEL_HI, 0.4) +
-      rect(w * 0.24, beamY + beamH, w * 0.38, h * 0.07, STEEL_DEEP) +
-      rect(w * 0.24, beamY + beamH, w * 0.38, h * 0.012, STEEL_HI, 0.5);
-    let node = '';
-    for (const t of [0.31, 0.55]) {
-      node += circ(w * t, beamY + beamH + h * 0.07, h * 0.055, POST);
-      node += circ(w * t, beamY + beamH + h * 0.07, h * 0.055, STEEL_HI, 0.18);
-      node += circ(w * t, beamY + beamH + h * 0.07, h * 0.02, STEEL_HI, 0.5);
+      draw(
+        { x: sheetX, w: w * 1.05 - sheetX, tl: -h * 0.05, tr: -h * 0.05, bl: h * 1.05, br: h * 1.05 },
+        px,
+      );
+    // столб стоит перед полотном: так его и видят со стороны участка
+    body += rect(pxL, h * 0.075, pwd, h * 0.95, 'url(#post)');
+    body += rect(pxL - pwd * 0.14, h * 0.035, pwd * 1.28, h * 0.042, '#525b60');
+    body += rect(pxL - pwd * 0.14, h * 0.035, pwd * 1.28, h * 0.014, STEEL_HI, 0.55);
+
+    for (const t of [0.27, 0.68]) {
+      const ry = h * t;
+      const rh = h * 0.085;
+      body += rect(pxL + pwd * 0.9, ry + rh * 0.9, w * 1.05 - pxL - pwd * 0.9, rh * 0.5, INK, 0.16);
+      body += rect(pxL + pwd * 0.9, ry, w * 1.05 - pxL - pwd * 0.9, rh, STEEL_LO);
+      body += rect(pxL + pwd * 0.9, ry, w * 1.05 - pxL - pwd * 0.9, rh * 0.2, STEEL_HI, 0.5);
+      body += rect(pxL + pwd * 0.9, ry + rh * 0.78, w * 1.05 - pxL - pwd * 0.9, rh * 0.22, INK, 0.25);
+      body += weld(pxL + pwd, ry + rh * 0.18, pxL + pwd, ry + rh * 0.82, px * 0.8);
+      for (let i = 0; i < 5; i++) {
+        body += bolt(pxL + pwd * 1.35 + i * w * 0.155, ry + rh * 0.5, h * 0.016);
+      }
     }
-    node += bolt(w * 0.22, h * 0.62, h * 0.016) + bolt(w * 0.64, h * 0.62, h * 0.016);
-    node += weld(w * 0.24, beamY + beamH, w * 0.62, beamY + beamH, s * 1.4);
-    return frame(w, h, { seed, hz }, body + node);
+    return frame(w, h, { seed, hz }, body);
   }
 
   if (kind === 'hinge') {
-    // Петля распашных ворот: столб, кромка створки, шов по месту приварки.
-    const hz = h * 0.4;
-    const px = s * 2.2;
-    const post = { x: w * 0.12, w: w * 0.2 };
-    const leaf = w * 0.5;
+    // Петля распашных ворот: два полуцилиндра на общем пальце, приваренные
+    // к столбу и к раме створки. Шов виден — его и показывают заказчику.
+    const hz = h * 0.42;
+    const px = s * 2.4;
+    const postX = w * 0.12;
+    const postW = w * 0.22;
+    const frameX = w * 0.5;
+    const frameW = w * 0.09;
     let body =
       softBack(w, h, hz, s, rnd) +
-      draw({ x: leaf, w: w * 0.62, tl: -h * 0.1, tr: -h * 0.1, bl: h * 1.1, br: h * 1.1 }, px) +
-      rect(leaf, -h * 0.1, w * 0.07, h * 1.2, STEEL_DEEP) +
-      rect(leaf, -h * 0.1, w * 0.014, h * 1.2, STEEL_HI, 0.4) +
-      rect(post.x, -h * 0.1, post.w, h * 1.2, 'url(#post)') +
-      rect(post.x - w * 0.02, -h * 0.1, post.w + w * 0.04, h * 0.05, '#525b60');
-    for (const t of [0.3, 0.76]) {
+      draw(
+        { x: frameX + frameW, w: w * 1.04 - frameX - frameW, tl: -h * 0.1, tr: -h * 0.1, bl: h * 1.1, br: h * 1.1 },
+        px,
+      ) +
+      rect(frameX, -h * 0.1, frameW, h * 1.2, STEEL_DEEP) +
+      rect(frameX, -h * 0.1, frameW * 0.18, h * 1.2, STEEL_HI, 0.4) +
+      rect(postX, -h * 0.02, postW, h * 1.1, 'url(#post)') +
+      rect(postX - w * 0.018, -h * 0.05, postW + w * 0.036, h * 0.032, '#525b60') +
+      rect(postX - w * 0.018, -h * 0.05, postW + w * 0.036, h * 0.011, STEEL_HI, 0.5);
+
+    for (const t of [0.34, 0.76]) {
       const hy = h * t;
-      body += rect(post.x + post.w * 0.72, hy - h * 0.06, w * 0.13, h * 0.12, STEEL_LO);
-      body += rect(post.x + post.w * 0.72, hy - h * 0.06, w * 0.13, h * 0.02, STEEL_HI, 0.45);
-      body += rect(leaf - w * 0.1, hy - h * 0.1, w * 0.12, h * 0.1, STEEL_LO);
-      body += rect(leaf - w * 0.1, hy - h * 0.1, w * 0.12, h * 0.016, STEEL_HI, 0.45);
-      body += rect(w * 0.355, hy - h * 0.11, w * 0.028, h * 0.19, POST);
-      body += circ(w * 0.369, hy - h * 0.11, w * 0.014, STEEL_HI, 0.5);
-      body += weld(post.x + post.w * 0.72, hy - h * 0.06, post.x + post.w * 0.72, hy + h * 0.06, px);
+      const bx = w * 0.4; // общий палец
+      const bw = w * 0.055;
+      // нижняя половина приварена к столбу, верхняя — к раме створки
+      body += rect(postX + postW - w * 0.01, hy + h * 0.005, bx - postX - postW + w * 0.03, h * 0.075, STEEL_LO);
+      body += rect(postX + postW - w * 0.01, hy + h * 0.005, bx - postX - postW + w * 0.03, h * 0.014, STEEL_HI, 0.45);
+      body += rect(bx + bw * 0.5, hy - h * 0.085, frameX - bx - bw * 0.3, h * 0.072, STEEL_LO);
+      body += rect(bx + bw * 0.5, hy - h * 0.085, frameX - bx - bw * 0.3, h * 0.013, STEEL_HI, 0.45);
+      body += rect(bx, hy - h * 0.105, bw, h * 0.21, POST);
+      body += rect(bx, hy - h * 0.105, bw * 0.26, h * 0.21, STEEL_LO, 0.7);
+      body += circ(bx + bw / 2, hy - h * 0.105, bw / 2, STEEL_LO);
+      body += circ(bx + bw / 2, hy - h * 0.105, bw * 0.26, STEEL_HI, 0.6);
+      body += weld(postX + postW, hy + h * 0.005, postX + postW, hy + h * 0.08, px);
     }
     return frame(w, h, { seed, hz }, body);
   }
@@ -723,20 +747,30 @@ export function detail({ w, h, kind, type = 'profnastil', seed = 1 }) {
     return frame(w, h, { seed, hz }, body);
   }
 
-  // 'lamella-end' — торцы ламелей жалюзи, заведённые в стойку.
-  const hz = h * 0.52;
-  const px = s * 2.4;
-  const stile = w * 0.14;
-  const q = { x: stile, w: w * 1.02 - stile, tl: -h * 0.06, tr: -h * 0.06, bl: h * 1.06, br: h * 1.06 };
-  let body = softBack(w, h, hz, s, rnd) + zhalyuzi(q, px);
-  body += rect(stile - w * 0.12, -h * 0.06, w * 0.14, h * 1.12, 'url(#post)');
-  body += rect(stile - w * 0.12, -h * 0.06, w * 0.022, h * 1.12, STEEL_HI, 0.35);
-  body += rect(stile - w * 0.022, -h * 0.06, w * 0.022, h * 1.12, INK, 0.3);
-  const H = spanH(q);
-  const n = Math.max(7, Math.round(H / (31 * px)));
+  // 'lamella-end' — торцы ламелей, заведённые в стойку. Здесь видно и толщину
+  // ламели, и просвет между ними, и то, как полотно держится в стойке.
+  const hz = h * 0.55;
+  const stileX = w * 0.3;
+  const stileW = w * 0.1;
+  const lamX = stileX + stileW * 0.6;
+  const n = 6;
+  const pitch = h / n;
+  let body = softBack(w, h, hz, s, rnd);
+
   for (let i = 0; i < n; i++) {
-    const y = q.tl + (H * (i + 0.4)) / n;
-    body += bolt(stile - w * 0.06, y, h * 0.013);
+    const y = h * 0.02 + i * pitch;
+    const bh = pitch * 0.76;
+    body += rect(lamX, y, w * 1.05 - lamX, bh, 'url(#panel)');
+    body += rect(lamX, y, w * 1.05 - lamX, bh * 0.24, '#ffffff', 0.22);
+    body += rect(lamX, y + bh * 0.78, w * 1.05 - lamX, bh * 0.22, INK, 0.3);
+    body += rect(lamX, y, w * 0.016, bh, INK, 0.22); // торец: видна толщина металла
+  }
+
+  body += rect(stileX, -h * 0.03, stileW, h * 1.06, 'url(#post)');
+  body += rect(stileX, -h * 0.03, stileW * 0.2, h * 1.06, STEEL_HI, 0.3);
+  body += rect(stileX + stileW * 0.86, -h * 0.03, stileW * 0.14, h * 1.06, INK, 0.3);
+  for (let i = 0; i < n; i++) {
+    body += bolt(stileX + stileW * 0.5, h * 0.02 + i * pitch + pitch * 0.38, h * 0.016);
   }
   return frame(w, h, { seed, hz }, body);
 }

@@ -121,10 +121,7 @@ export function Consent({
   children: React.ReactNode;
 }) {
   return (
-    <label
-      htmlFor={id}
-      className="t-xs flex cursor-pointer items-start gap-3 text-[var(--fg-2)]"
-    >
+    <label htmlFor={id} className="t-xs flex cursor-pointer items-start gap-3 text-[var(--fg-2)]">
       <span className="relative mt-px inline-flex size-5 shrink-0">
         <input
           id={id}

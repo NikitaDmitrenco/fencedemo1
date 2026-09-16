@@ -31,7 +31,7 @@ const jobs = [
   // Объект 1 — профнастил с откатными воротами
   ['case-1-1.jpg', object({ w: 1500, h: 1000, type: 'profnastil', seed: 31, spans: 5, angle: 'right', withGate: true })],
   ['case-1-2.jpg', gate({ w: 1500, h: 1000, type: 'profnastil', seed: 32, kind: 'sliding' })],
-  ['case-1-3.jpg', detail({ w: 1500, h: 1000, type: 'profnastil', seed: 33, kind: 'roller' })],
+  ['case-1-3.jpg', detail({ w: 1500, h: 1000, type: 'profnastil', seed: 33, kind: 'post-rail' })],
 
   // Объект 2 — евроштакетник с распашными воротами
   ['case-2-1.jpg', object({ w: 1500, h: 1000, type: 'evroshtaketnik', seed: 41, spans: 6, angle: 'left' })],
