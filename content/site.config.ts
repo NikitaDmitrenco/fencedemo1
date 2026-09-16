@@ -8,7 +8,7 @@
  * Значения ниже — демонстрационные placeholders. Все непроверяемые факты
  * компании намеренно оставлены как '[X]'.
  */
-
+//
 import type { SiteConfig } from './types';
 
 export const site: SiteConfig = {
