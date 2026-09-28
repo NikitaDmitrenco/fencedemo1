@@ -13,8 +13,8 @@ import { type CountryCode, countryByIso, DEFAULT_COUNTRY_ISO } from './phone-cou
 /**
  * Нормализует телефонный ввод к формату <кодСтраны><номер>.
  *
- * Возвращает строку вида "79001234567" или null, если номер неполный.
- * Для российских номеров по-прежнему поддерживает ввод с ведущей 8.
+ * Возвращает строку вида "37368088948" или null, если номер неполный.
+ * Принимает локальный номер (без кода страны) и добавляет код автоматически.
  */
 export function normalizePhone(input: string, countryIso?: string): string | null {
   const country = countryIso ? countryByIso(countryIso) : countryByIso(DEFAULT_COUNTRY_ISO);
@@ -24,6 +24,11 @@ export function normalizePhone(input: string, countryIso?: string): string | nul
   if (country.dialCode === '7') {
     if (digits.startsWith('8')) digits = `7${digits.slice(1)}`;
     if (digits.length === country.digits) digits = `7${digits}`;
+  }
+
+  // Если введено только локальное число без кода — добавляем код
+  if (digits.length === country.digits && !digits.startsWith(country.dialCode)) {
+    digits = `${country.dialCode}${digits}`;
   }
 
   const fullLength = country.dialCode.length + country.digits;
@@ -49,8 +54,13 @@ export function maskPhone(input: string, countryIso?: string): string {
   if (country.dialCode === '7') {
     if (digits.startsWith('8')) digits = `7${digits.slice(1)}`;
     if (!digits.startsWith('7')) digits = `7${digits}`;
+    // Если пользователь ввёл локальный номер без кода — добавляем код
+    if (digits.length <= country.digits && !digits.startsWith('7')) {
+      digits = `7${digits}`;
+    }
   }
 
+  // Обрезаем до максимальной длины (код страны + локальный номер)
   digits = digits.slice(0, country.dialCode.length + country.digits);
 
   // Отделяем код страны от номера
@@ -101,11 +111,15 @@ export function displayPhone(normalized: string, countryIso?: string): string {
 
 /**
  * Проверяет, заполнен ли номер полностью для данной страны.
+ *
+ * Проверяет только локальную часть номера (без кода страны),
+ * так как код уже отображается в кнопке выбора страны.
  */
 export function isPhoneComplete(input: string, countryIso?: string): boolean {
   const country = countryIso ? countryByIso(countryIso) : countryByIso(DEFAULT_COUNTRY_ISO);
   const digits = input.replace(/\D/g, '');
-  return digits.length === country.dialCode.length + country.digits;
+  // Проверяем количество цифр в локальной части (без кода страны)
+  return digits.length >= country.digits;
 }
 
 /**
