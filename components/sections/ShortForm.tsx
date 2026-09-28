@@ -52,7 +52,7 @@ export function ShortForm() {
     startedAt.current = Date.now();
   }, []);
 
-  const ready = task.trim().length >= 3 && isPhoneComplete(phone, country) && consent;
+  const ready = isPhoneComplete(phone, country) && consent;
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
