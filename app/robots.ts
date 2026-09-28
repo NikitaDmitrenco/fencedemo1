@@ -1,14 +1,9 @@
 import type { MetadataRoute } from 'next';
 
-export const dynamic = 'force-static';
-
-export default function robots(): MetadataRoute.Robots {
-  // здесь оставь существующий код
-}
-
-import type { MetadataRoute } from 'next';
-import { siteUrl } from '@/lib/site-url';
 import { site } from '@/content/site.config';
+import { siteUrl } from '@/lib/site-url';
+
+export const dynamic = 'force-static';
 
 export default function robots(): MetadataRoute.Robots {
   // Демо целиком закрыто от обхода: страница с вымышленными названием,
