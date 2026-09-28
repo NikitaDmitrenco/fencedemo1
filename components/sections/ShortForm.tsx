@@ -58,6 +58,9 @@ export function ShortForm() {
     setStatus('sending');
     setError(null);
 
+    // Запоминаем позицию скролла перед отправкой
+    const scrollY = window.scrollY;
+
     const parsedLength = Number.parseInt(length, 10);
 
     try {
@@ -87,6 +90,8 @@ export function ShortForm() {
       }
 
       setStatus('done');
+      // Восстанавливаем позицию скролла (браузер может сдвинуть при ре-рендере)
+      requestAnimationFrame(() => window.scrollTo(0, scrollY));
     } catch {
       setError('Нет связи с сервером. Проверьте интернет или позвоните нам.');
       setStatus('error');
