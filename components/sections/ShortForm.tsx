@@ -43,7 +43,6 @@ export function ShortForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const doneRef = useRef<HTMLDivElement>(null);
   // Момент открытия формы фиксируется в эффекте, а не при рендере: часы во
   // время рендера делают его неидемпотентным, а до монтирования ноль безопасен.
   const startedAt = useRef(0);
@@ -94,23 +93,21 @@ export function ShortForm() {
     }
   }
 
-  if (status === 'done') {
-    return (
-      <div ref={doneRef} className={clsx(SHELL, 'text-center')}>
-        <p className="t-h3">Заявка принята</p>
-        <p className="t-sm measure mx-auto mt-3 text-[var(--fg-2)]">
-          Перезвоним в рабочее время и уточним детали. Если нужно срочно — звоните сами.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <form ref={formRef} onSubmit={submit} className={SHELL}>
-      <p className="t-h3">Оставьте заявку</p>
-      <p className="t-sm mt-2 text-[var(--fg-2)]">
-        Перезвоним, уточним детали и посчитаем точную стоимость.
-      </p>
+      {status === 'done' ? (
+        <div className="text-center">
+          <p className="t-h3">Заявка принята</p>
+          <p className="t-sm measure mx-auto mt-3 text-[var(--fg-2)]">
+            Перезвоним в рабочее время и уточним детали. Если нужно срочно — звоните сами.
+          </p>
+        </div>
+      ) : (
+        <>
+          <p className="t-h3">Оставьте заявку</p>
+          <p className="t-sm mt-2 text-[var(--fg-2)]">
+            Перезвоним, уточним детали и посчитаем точную стоимость.
+          </p>
 
       <div className="mt-6 space-y-5">
         <Field id="short-task" label="Что нужно сделать" required>
@@ -208,6 +205,8 @@ export function ShortForm() {
       >
         {status === 'sending' ? 'Отправляем…' : 'Отправить заявку'}
       </Button>
+        </>
+      )}
     </form>
   );
 }
