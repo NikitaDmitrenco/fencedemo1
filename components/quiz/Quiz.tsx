@@ -116,8 +116,6 @@ export function Quiz() {
       }
 
       setStatus('done');
-      // Сохраняем позицию скролла после отправки
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch {
       setError('Нет связи с сервером. Проверьте интернет или позвоните нам.');
       setStatus('error');

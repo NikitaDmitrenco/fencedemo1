@@ -88,9 +88,6 @@ export function ShortForm() {
       }
 
       setStatus('done');
-      // Сохраняем позицию скролла после отправки
-      const targetRef = formRef.current || doneRef.current;
-      targetRef?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch {
       setError('Нет связи с сервером. Проверьте интернет или позвоните нам.');
       setStatus('error');
