@@ -1,0 +1,81 @@
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Не даём двум деплоям выполняться одновременно.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy from main
+    runs-on: ubuntu-latest
+
+    # Дополнительная защита: job физически не запустится
+    # для любого ref кроме main.
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Verify branch
+        run: |
+          echo "Deploying branch: $(git branch --show-current)"
+          echo "Commit: $(git rev-parse HEAD)"
+          echo "Expected branch: main"
+
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "ERROR: checked-out commit is not the current origin/main commit"
+            exit 1
+          fi
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --pull \
+            -t erow-cloud:latest \
+            .
+
+      # ============================================================
+      # DEPLOY
+      # ============================================================
+      #
+      # Здесь должны быть реальные команды доставки контейнера
+      # на production-сервер / registry.
+      #
+      # GitHub Actions уже гарантирует к этому моменту:
+      #   1. workflow запущен из main;
+      #   2. checkout сделан именно из main;
+      #   3. HEAD совпадает с origin/main;
+      #   4. Docker image собран именно из этого состояния main.
+      #
+      # Пример:
+      #
+      # - name: Login to container registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+      #
+      # - name: Push image
+      #   run: |
+      #     docker tag erow-cloud:latest ghcr.io/${{ github.repository }}/erow-cloud:latest
+      #     docker push ghcr.io/${{ github.repository }}/erow-cloud:latest
+      #
+      # - name: Deploy
+      #   run: |
+      #     ssh ... "docker pull ... && docker compose up -d"
