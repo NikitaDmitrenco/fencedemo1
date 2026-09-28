@@ -156,13 +156,17 @@ export function PhoneInput({
           className={clsx(
             'absolute z-50 mt-1 w-full max-h-60 overflow-auto',
             'rounded-[var(--radius-control)] border border-[var(--hairline-strong)]',
-            'bg-[var(--field-bg)] shadow-lg',
+            'shadow-lg',
           )}
+          style={{ backgroundColor: 'var(--surface-bg)' }}
           role="listbox"
           aria-label="Список стран"
         >
           {/* Поиск */}
-          <div className="sticky top-0 bg-[var(--field-bg)] p-2 border-b border-[var(--hairline-strong)]">
+          <div
+            className="sticky top-0 p-2 border-b border-[var(--hairline-strong)]"
+            style={{ backgroundColor: 'var(--surface-bg)' }}
+          >
             <input
               type="text"
               value={search}
@@ -170,9 +174,10 @@ export function PhoneInput({
               placeholder="Поиск страны..."
               className={clsx(
                 'w-full rounded px-3 py-2 text-sm',
-                'border border-[var(--hairline-strong)] bg-[var(--field-bg)]',
+                'border border-[var(--hairline-strong)]',
                 'placeholder:text-[var(--fg-3)] focus:outline-none focus:border-[var(--fg)]',
               )}
+              style={{ backgroundColor: 'var(--field-bg)', color: 'var(--fg)' }}
               autoFocus
             />
           </div>
@@ -187,9 +192,26 @@ export function PhoneInput({
               onClick={() => handleCountrySelect(c)}
               className={clsx(
                 'flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm',
-                'transition-colors hover:bg-[var(--fg-3)]',
-                c.iso === country && 'bg-[var(--color-accent-soft)]',
+                'transition-colors duration-100',
+                c.iso === country
+                  ? 'text-[var(--fg)]'
+                  : 'text-[var(--fg-2)] hover:text-[var(--fg)]',
               )}
+              style={{
+                backgroundColor: c.iso === country
+                  ? 'var(--color-accent-soft)'
+                  : 'transparent',
+              }}
+              onMouseEnter={(e) => {
+                if (c.iso !== country) {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (c.iso !== country) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }
+              }}
             >
               <span className="w-8 text-center text-[var(--fg-3)]">+{c.dialCode}</span>
               <span className="flex-1">{c.name}</span>
