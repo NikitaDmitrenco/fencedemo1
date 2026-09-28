@@ -4,9 +4,9 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { site } from '@/content/site.config';
 import { estimatePrice, formatRub, type FenceType } from '@/content/pricing';
 import { FENCE_TYPES, GATES, HEIGHTS, LENGTH_PRESETS, MESSENGERS } from '@/content/quiz';
-import { Button, Card, CheckIcon, Consent, Field, Input } from '@/components/ui';
+import { Button, Card, CheckIcon, Consent, Field, Input, PhoneInput } from '@/components/ui';
 import { OptionCard } from './OptionCard';
-import { maskPhone } from '@/lib/phone';
+import { LEAD_API_URL } from '@/lib/config';
 import { clsx } from '@/lib/clsx';
 import {
   STEPS,
@@ -86,7 +86,7 @@ export function Quiz() {
     setError(null);
 
     try {
-      const response = await fetch('/api/lead', {
+      const response = await fetch(LEAD_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,6 +98,7 @@ export function Quiz() {
           automation: state.automation,
           name: state.name || undefined,
           phone: state.phone,
+          country: state.country,
           messenger: state.messenger,
           consent: state.consent,
           company: '',
@@ -346,16 +347,12 @@ export function Quiz() {
               </Field>
 
               <Field id="quiz-phone" label="Телефон" required>
-                <Input
+                <PhoneInput
                   id="quiz-phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="+7 (___) ___-__-__"
                   value={state.phone}
-                  onChange={(e) =>
-                    dispatch({ kind: 'set', patch: { phone: maskPhone(e.target.value) } })
-                  }
+                  onChange={(phone) => dispatch({ kind: 'set', patch: { phone } })}
+                  country={state.country}
+                  onCountryChange={(country) => dispatch({ kind: 'set', patch: { country } })}
                 />
               </Field>
 

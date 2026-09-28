@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           GITHUB_PAGES: true
+          NEXT_PUBLIC_LEAD_API_URL: ${{ secrets.LEAD_API_URL }}
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { normalizePhone } from '@/lib/phone';
+import { DEFAULT_COUNTRY_ISO } from '@/lib/phone-countries';
 
 /**
  * Схема заявки. Одна на клиент и сервер: браузеру верить нельзя, а
@@ -15,8 +16,21 @@ const contactFields = {
 
   phone: z
     .string('Укажите телефон')
-    .transform((value) => normalizePhone(value))
-    .refine((value): value is string => value !== null, 'Введите телефон полностью'),
+    .transform((value) => {
+      // Пытаемся нормализовать номер. Если не удалось — вернём null,
+      // а следующая проверка покажет ошибку.
+      return normalizePhone(value) ?? value;
+    })
+    .refine(
+      (value) => {
+        // Принимаем номер если он содержит хотя бы 7 цифр (минимум для любой страны)
+        const digits = value.replace(/\D/g, '');
+        return digits.length >= 7;
+      },
+      'Введите телефон полностью',
+    ),
+
+  country: z.string().default(DEFAULT_COUNTRY_ISO),
 
   messenger: z.enum(['call', 'whatsapp', 'telegram'], 'Выберите способ связи'),
 

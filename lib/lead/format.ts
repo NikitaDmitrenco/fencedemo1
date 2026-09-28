@@ -43,7 +43,7 @@ export function formatLead(lead: Lead): string {
     ...details,
     '',
     lead.name ? `Имя: ${lead.name}` : null,
-    `Телефон: ${displayPhone(lead.phone)}`,
+    `Телефон: ${displayPhone(lead.phone, lead.country)}`,
     `Связь: ${messengerLabel(lead.messenger)}`,
   ];
 

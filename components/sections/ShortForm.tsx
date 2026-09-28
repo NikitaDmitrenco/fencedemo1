@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { site } from '@/content/site.config';
-import { Button, Consent, Field, Input, Textarea } from '@/components/ui';
+import { Button, Consent, Field, Input, Textarea, PhoneInput } from '@/components/ui';
 import { OptionCard } from '@/components/quiz/OptionCard';
 import { MESSENGERS, type Messenger } from '@/content/quiz';
-import { maskPhone } from '@/lib/phone';
+import { isPhoneComplete } from '@/lib/phone';
+import { DEFAULT_COUNTRY_ISO } from '@/lib/phone-countries';
+import { LEAD_API_URL } from '@/lib/config';
 import { clsx } from '@/lib/clsx';
 
 /**
@@ -35,6 +37,7 @@ export function ShortForm() {
   const [length, setLength] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState(DEFAULT_COUNTRY_ISO);
   const [messenger, setMessenger] = useState<Messenger>('call');
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
@@ -47,7 +50,7 @@ export function ShortForm() {
     startedAt.current = Date.now();
   }, []);
 
-  const ready = task.trim().length >= 3 && phone.replace(/\D/g, '').length === 11 && consent;
+  const ready = task.trim().length >= 3 && isPhoneComplete(phone, country) && consent;
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -57,7 +60,7 @@ export function ShortForm() {
     const parsedLength = Number.parseInt(length, 10);
 
     try {
-      const response = await fetch('/api/lead', {
+      const response = await fetch(LEAD_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -66,6 +69,7 @@ export function ShortForm() {
           length: Number.isFinite(parsedLength) && parsedLength > 0 ? parsedLength : undefined,
           name: name || undefined,
           phone,
+          country,
           messenger,
           consent,
           company: '',
@@ -141,14 +145,12 @@ export function ShortForm() {
         </Field>
 
         <Field id="short-phone" label="Телефон" required>
-          <Input
+          <PhoneInput
             id="short-phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
             value={phone}
-            onChange={(e) => setPhone(maskPhone(e.target.value))}
-            placeholder="+7 (___) ___-__-__"
+            onChange={setPhone}
+            country={country}
+            onCountryChange={setCountry}
           />
         </Field>
 

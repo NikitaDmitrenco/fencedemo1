@@ -1,5 +1,7 @@
 import type { FenceType, GateType, Height } from '@/content/pricing';
 import type { Messenger } from '@/content/quiz';
+import { isPhoneComplete } from '@/lib/phone';
+import { DEFAULT_COUNTRY_ISO } from '@/lib/phone-countries';
 
 export const STEPS = ['type', 'length', 'height', 'gates', 'contact'] as const;
 export type StepName = (typeof STEPS)[number];
@@ -13,6 +15,7 @@ export interface QuizState {
   automation: boolean;
   name: string;
   phone: string;
+  country: string;
   messenger: Messenger;
   consent: boolean;
 }
@@ -26,6 +29,7 @@ export const initialState: QuizState = {
   automation: false,
   name: '',
   phone: '',
+  country: DEFAULT_COUNTRY_ISO,
   messenger: 'call',
   consent: false,
 };
@@ -83,7 +87,7 @@ export function canAdvance(state: QuizState): boolean {
     case 'gates':
       return state.gates !== null;
     case 'contact':
-      return state.phone.replace(/\D/g, '').length === 11 && state.consent;
+      return isPhoneComplete(state.phone, state.country) && state.consent;
     default:
       return false;
   }
