@@ -35,10 +35,11 @@ export function normalizePhone(input: string, countryIso?: string): string | nul
 /**
  * Форматирует ввод по маске страны по мере набора.
  *
+ * Возвращает ТОЛЬКО маску номера БЕЗ кода страны (код уже в кнопке).
  * Примеры:
- * - Россия:  +7 (999) 123-45-67
- * - США:     +1 (202) 555-0147
- * - Украина: +380 (67) 123-45-67
+ * - Россия:  (999) 123-45-67
+ * - США:     (202) 555-0147
+ * - Украина: (67) 123-45-67
  */
 export function maskPhone(input: string, countryIso?: string): string {
   const country = countryIso ? countryByIso(countryIso) : countryByIso(DEFAULT_COUNTRY_ISO);
@@ -55,11 +56,10 @@ export function maskPhone(input: string, countryIso?: string): string {
   // Отделяем код страны от номера
   const localNumber = digits.slice(country.dialCode.length);
 
-  if (localNumber.length === 0) return `+${country.dialCode} `;
+  if (localNumber.length === 0) return '';
 
-  // Применяем маску к локальному номеру
-  const masked = applyMask(localNumber, country.mask);
-  return `+${country.dialCode} ${masked}`;
+  // Применяем маску к локальному номеру (без кода страны)
+  return applyMask(localNumber, country.mask);
 }
 
 /** Применяет шаблон маски к цифрам. X — цифра, всё остальное — разделитель. */

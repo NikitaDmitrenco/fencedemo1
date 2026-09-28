@@ -54,7 +54,8 @@ export function PhoneInput({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const selectedCountry = countryByIso(country);
-  const displayPlaceholder = placeholder ?? `+${selectedCountry.dialCode} ${selectedCountry.mask.replace(/X/g, '_')}`;
+  // Плейсхолдер только с маской, без кода страны (код уже в кнопке)
+  const displayPlaceholder = placeholder ?? selectedCountry.mask.replace(/X/g, '_');
 
   // Фильтрация стран по поиску
   const filteredCountries = search

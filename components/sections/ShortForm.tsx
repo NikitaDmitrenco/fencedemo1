@@ -42,6 +42,8 @@ export function ShortForm() {
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const doneRef = useRef<HTMLDivElement>(null);
   // Момент открытия формы фиксируется в эффекте, а не при рендере: часы во
   // время рендера делают его неидемпотентным, а до монтирования ноль безопасен.
   const startedAt = useRef(0);
@@ -86,6 +88,9 @@ export function ShortForm() {
       }
 
       setStatus('done');
+      // Сохраняем позицию скролла после отправки
+      const targetRef = formRef.current || doneRef.current;
+      targetRef?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch {
       setError('Нет связи с сервером. Проверьте интернет или позвоните нам.');
       setStatus('error');
@@ -94,7 +99,7 @@ export function ShortForm() {
 
   if (status === 'done') {
     return (
-      <div className={clsx(SHELL, 'text-center')}>
+      <div ref={doneRef} className={clsx(SHELL, 'text-center')}>
         <p className="t-h3">Заявка принята</p>
         <p className="t-sm measure mx-auto mt-3 text-[var(--fg-2)]">
           Перезвоним в рабочее время и уточним детали. Если нужно срочно — звоните сами.
@@ -104,7 +109,7 @@ export function ShortForm() {
   }
 
   return (
-    <form onSubmit={submit} className={SHELL}>
+    <form ref={formRef} onSubmit={submit} className={SHELL}>
       <p className="t-h3">Оставьте заявку</p>
       <p className="t-sm mt-2 text-[var(--fg-2)]">
         Перезвоним, уточним детали и посчитаем точную стоимость.

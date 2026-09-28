@@ -36,6 +36,7 @@ export function Quiz() {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
   const [customLength, setCustomLength] = useState('');
+  const formRef = useRef<HTMLDivElement>(null);
   // Момент открытия формы фиксируется в эффекте, а не при рендере: обращение
   // к часам во время рендера делает его неидемпотентным. Ноль до монтирования
   // безопасен — он даёт заведомо большую длительность, то есть проверка на
@@ -115,6 +116,8 @@ export function Quiz() {
       }
 
       setStatus('done');
+      // Сохраняем позицию скролла после отправки
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch {
       setError('Нет связи с сервером. Проверьте интернет или позвоните нам.');
       setStatus('error');
@@ -123,6 +126,7 @@ export function Quiz() {
 
   if (status === 'done') {
     return (
+      <div ref={formRef}>
       <Card className={clsx(SHELL, 'text-center')}>
         {/* Подтверждение намеренно тихое: заявка на замер — начало работы, а
             не праздник, и громкая «победа» здесь звучит фальшиво. */}
@@ -143,6 +147,7 @@ export function Quiz() {
           </a>
         </p>
       </Card>
+      </div>
     );
   }
 
@@ -150,6 +155,7 @@ export function Quiz() {
   const current = visibleStepIndex(state);
 
   return (
+    <div ref={formRef}>
     <Card className={SHELL}>
       {/* Прогресс: человек должен видеть, что вопросов мало и они кончаются.
           Сегменты равные и пересчитаны под реально видимые шаги — при выборе
@@ -444,5 +450,6 @@ export function Quiz() {
         )}
       </div>
     </Card>
+    </div>
   );
 }
