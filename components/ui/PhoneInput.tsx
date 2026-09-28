@@ -194,8 +194,8 @@ export function PhoneInput({
                 'flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm',
                 'transition-colors duration-100',
                 c.iso === country
-                  ? 'text-black'
-                  : 'text-[var(--fg-2)] hover:text-[var(--fg)]',
+                  ? 'text-black [&>span]:text-black'
+                  : 'text-[var(--fg-2)] hover:text-[var(--fg)] [&>span:first-child]:text-[var(--fg-3)] [&>span:last-child]:text-[var(--fg-3)]',
               )}
               style={{
                 backgroundColor: c.iso === country
@@ -213,9 +213,9 @@ export function PhoneInput({
                 }
               }}
             >
-              <span className="w-8 text-center text-[var(--fg-3)]">+{c.dialCode}</span>
+              <span className="w-8 text-center">+{c.dialCode}</span>
               <span className="flex-1">{c.name}</span>
-              <span className="text-[var(--fg-3)] text-xs">{c.iso}</span>
+              <span className="text-xs">{c.iso}</span>
             </button>
           ))}
 
