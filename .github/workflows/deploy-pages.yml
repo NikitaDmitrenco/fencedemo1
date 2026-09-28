@@ -35,6 +35,7 @@ jobs:
       - name: Build static site
         env:
           NEXT_PUBLIC_SITE_URL: https://nikitadmitrenco.github.io/fencedemo1
+          NEXT_PUBLIC_BASE_PATH: /fencedemo1
         run: npm run build
 
       - name: Upload Pages artifact
