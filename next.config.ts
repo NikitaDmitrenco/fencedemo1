@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   output: 'export',
 
   basePath: '/fencedemo1',
-  assetPrefix: '/fencedemo1/',
   trailingSlash: true,
 
   images: {
