@@ -18,58 +18,37 @@ import { type CountryCode, countryByIso, DEFAULT_COUNTRY_ISO } from './phone-cou
  */
 export function normalizePhone(input: string, countryIso?: string): string | null {
   const country = countryIso ? countryByIso(countryIso) : countryByIso(DEFAULT_COUNTRY_ISO);
-  let digits = input.replace(/\D/g, '');
+  const digits = input.replace(/\D/g, '');
 
-  // Специальная обработка для России/Казахстана: 8 (900)… = +7 (900)…
-  if (country.dialCode === '7') {
-    if (digits.startsWith('8')) digits = `7${digits.slice(1)}`;
-    if (digits.length === country.digits) digits = `7${digits}`;
-  }
+  // Проверяем, что введено достаточно цифр для локального номера
+  if (digits.length < country.digits) return null;
 
-  // Если введено только локальное число без кода — добавляем код
-  if (digits.length === country.digits && !digits.startsWith(country.dialCode)) {
-    digits = `${country.dialCode}${digits}`;
-  }
+  // Берём только локальную часть (последние digits цифр)
+  const localNumber = digits.slice(-country.digits);
 
-  const fullLength = country.dialCode.length + country.digits;
-  return digits.length === fullLength && digits.startsWith(country.dialCode)
-    ? digits
-    : null;
+  // Формируем полный номер с кодом страны
+  return `${country.dialCode}${localNumber}`;
 }
 
 /**
  * Форматирует ввод по маске страны по мере набора.
  *
  * Возвращает ТОЛЬКО маску номера БЕЗ кода страны (код уже в кнопке).
+ * Пользователь вводит только локальный номер.
+ *
  * Примеры:
  * - Россия:  (999) 123-45-67
- * - США:     (202) 555-0147
- * - Украина: (67) 123-45-67
+ * - Молдова: XXXX XXXX
  */
 export function maskPhone(input: string, countryIso?: string): string {
   const country = countryIso ? countryByIso(countryIso) : countryByIso(DEFAULT_COUNTRY_ISO);
-  let digits = input.replace(/\D/g, '');
+  // Берём только цифры из ввода (это локальный номер, без кода страны)
+  const digits = input.replace(/\D/g, '').slice(0, country.digits);
 
-  // Специальная обработка для России/Казахстана
-  if (country.dialCode === '7') {
-    if (digits.startsWith('8')) digits = `7${digits.slice(1)}`;
-    if (!digits.startsWith('7')) digits = `7${digits}`;
-    // Если пользователь ввёл локальный номер без кода — добавляем код
-    if (digits.length <= country.digits && !digits.startsWith('7')) {
-      digits = `7${digits}`;
-    }
-  }
+  if (digits.length === 0) return '';
 
-  // Обрезаем до максимальной длины (код страны + локальный номер)
-  digits = digits.slice(0, country.dialCode.length + country.digits);
-
-  // Отделяем код страны от номера
-  const localNumber = digits.slice(country.dialCode.length);
-
-  if (localNumber.length === 0) return '';
-
-  // Применяем маску к локальному номеру (без кода страны)
-  return applyMask(localNumber, country.mask);
+  // Применяем маску к локальному номеру
+  return applyMask(digits, country.mask);
 }
 
 /** Применяет шаблон маски к цифрам. X — цифра, всё остальное — разделитель. */
