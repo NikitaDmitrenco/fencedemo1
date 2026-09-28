@@ -35,8 +35,7 @@ jobs:
 
       - name: Build Next.js
   run: npm run build
-  env:
-    GITHUB_PAGES: true
+  
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
