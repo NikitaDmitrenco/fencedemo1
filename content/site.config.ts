@@ -11,6 +11,9 @@
 //
 import type { SiteConfig } from './types';
 
+const ASSET_BASE = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, '') ?? '';
+const asset = (path: string) => `${ASSET_BASE}${path}`;
+
 export const site: SiteConfig = {
   isDemo: true,
 
