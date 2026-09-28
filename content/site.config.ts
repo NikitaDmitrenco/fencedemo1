@@ -44,7 +44,7 @@ export const site: SiteConfig = {
       { icon: 'wrench', title: 'Свои бригады', note: 'без субподряда и посредников' },
       { icon: 'document', title: 'Договор и смета', note: 'цена фиксируется до начала работ' },
     ],
-    image: '/media/demo/hero.jpg',
+    image: asset('/media/demo/hero.jpg'),
     imageAlt: 'Забор из профнастила с откатными воротами вдоль частного участка',
   },
 
@@ -55,7 +55,7 @@ export const site: SiteConfig = {
       benefit: 'Закрывает участок от глаз и ветра. Самое понятное решение по цене и срокам.',
       priceFrom: 2100,
       priceUnit: 'м.п.',
-      image: '/media/demo/product-profnastil.jpg',
+      image: asset('/media/demo/product-profnastil.jpg'),
     },
     {
       slug: 'evroshtaketnik',
@@ -63,7 +63,7 @@ export const site: SiteConfig = {
       benefit: 'Выглядит аккуратно с обеих сторон, пропускает свет и не парусит на ветру.',
       priceFrom: 2600,
       priceUnit: 'м.п.',
-      image: '/media/demo/product-evroshtaketnik.jpg',
+      image: asset('/media/demo/product-evroshtaketnik.jpg'),
     },
     {
       slug: 'setka-3d',
@@ -71,7 +71,7 @@ export const site: SiteConfig = {
       benefit: 'Обозначает границы участка за минимальные деньги. Ставится быстро.',
       priceFrom: 1450,
       priceUnit: 'м.п.',
-      image: '/media/demo/product-setka.jpg',
+      image: asset('/media/demo/product-setka.jpg'),
     },
     {
       slug: 'zhalyuzi',
@@ -79,7 +79,7 @@ export const site: SiteConfig = {
       benefit: 'Современный вид и приватность без глухой стены. Для домов, где важен фасад.',
       priceFrom: 4900,
       priceUnit: 'м.п.',
-      image: '/media/demo/product-zhalyuzi.jpg',
+      image: asset('/media/demo/product-zhalyuzi.jpg'),
     },
     {
       slug: 'otkatnye-vorota',
@@ -87,7 +87,7 @@ export const site: SiteConfig = {
       benefit: 'Не занимают место на въезде и работают зимой. С автоматикой или без.',
       priceFrom: 89000,
       priceUnit: 'шт.',
-      image: '/media/demo/product-vorota.jpg',
+      image: asset('/media/demo/product-vorota.jpg'),
     },
   ],
 
