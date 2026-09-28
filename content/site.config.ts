@@ -32,7 +32,7 @@ export const site: SiteConfig = {
   brand: {
     accent: '#E0A33C',
     logo: null,
-    photoDir: '/media/demo',
+    photoDir: asset('/media/demo'),
   },
 
   hero: {
@@ -101,7 +101,11 @@ export const site: SiteConfig = {
       term: '7 дней',
       price: 289000,
       district: 'Пригород, [X] км от города',
-      photos: ['/media/demo/case-1-1.jpg', '/media/demo/case-1-2.jpg', '/media/demo/case-1-3.jpg'],
+      photos: [
+  asset('/media/demo/case-1-1.jpg'),
+  asset('/media/demo/case-1-2.jpg'),
+  asset('/media/demo/case-1-3.jpg'),
+],
     },
     {
       title: 'Дом в частном секторе',
@@ -112,7 +116,7 @@ export const site: SiteConfig = {
       term: '5 дней',
       price: 178000,
       district: 'Городской частный сектор',
-      photos: ['/media/demo/case-2-1.jpg', '/media/demo/case-2-2.jpg', '/media/demo/case-2-3.jpg'],
+      photos: [asset('/media/demo/case-2-1.jpg'), asset('/media/demo/case-2-2.jpg'), asset('/media/demo/case-2-3.jpg')],
     },
     {
       title: 'Дача, участок на склоне',
@@ -123,7 +127,7 @@ export const site: SiteConfig = {
       term: '4 дня',
       price: 154000,
       district: 'Садовое товарищество',
-      photos: ['/media/demo/case-3-1.jpg', '/media/demo/case-3-2.jpg', '/media/demo/case-3-3.jpg'],
+      photos: [asset('/media/demo/case-3-1.jpg'), asset('/media/demo/case-3-2.jpg'), asset('/media/demo/case-3-3.jpg')],
     },
     {
       title: 'Фасад загородного дома',
@@ -134,7 +138,7 @@ export const site: SiteConfig = {
       term: '9 дней',
       price: 412000,
       district: 'Коттеджный посёлок',
-      photos: ['/media/demo/case-4-1.jpg', '/media/demo/case-4-2.jpg', '/media/demo/case-4-3.jpg'],
+      photos: [asset('/media/demo/case-4-1.jpg'), asset('/media/demo/case-4-2.jpg'), asset('/media/demo/case-4-3.jpg')],
     },
   ],
 
