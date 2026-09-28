@@ -1,12 +1,18 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Требование ТЗ: фотографии в WebP/AVIF.
+  // GitHub Pages — статический экспорт.
+  output: 'export',
+
+  // Репозиторий публикуется по адресу /fencedemo1.
+  basePath: '/fencedemo1',
+  trailingSlash: true,
+
+  // GitHub Pages не имеет Next.js Image Optimization API.
   images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920],
+    unoptimized: true,
   },
-  // Убираем заголовок, раскрывающий стек, — лишняя информация на клиентском сайте.
+
   poweredByHeader: false,
   typedRoutes: true,
 };
