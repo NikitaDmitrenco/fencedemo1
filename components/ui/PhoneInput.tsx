@@ -194,7 +194,7 @@ export function PhoneInput({
                 'flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm',
                 'transition-colors duration-100',
                 c.iso === country
-                  ? 'text-[var(--fg)]'
+                  ? 'text-black'
                   : 'text-[var(--fg-2)] hover:text-[var(--fg)]',
               )}
               style={{
