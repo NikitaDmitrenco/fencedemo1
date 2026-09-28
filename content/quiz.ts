@@ -8,6 +8,11 @@
 
 import type { FenceType, GateType, Height } from './pricing';
 
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+
+const assetPath = (path: string): string =>
+  isGitHubPages ? `/fencedemo1${path}` : path;
+
 export interface Option<T> {
   value: T;
   label: string;
@@ -20,25 +25,25 @@ export const FENCE_TYPES: Option<FenceType>[] = [
     value: 'profnastil',
     label: 'Профнастил',
     note: 'глухой, закрывает участок',
-    image: '/media/demo/product-profnastil.jpg',
+    image: assetPath('/media/demo/product-profnastil.jpg'),
   },
   {
     value: 'evroshtaketnik',
     label: 'Евроштакетник',
     note: 'с просветом, светлее',
-    image: '/media/demo/product-evroshtaketnik.jpg',
+    image: assetPath('/media/demo/product-evroshtaketnik.jpg'),
   },
   {
     value: 'setka-3d',
     label: '3D-сетка',
     note: 'бюджетное решение',
-    image: '/media/demo/product-setka.jpg',
+    image: assetPath('/media/demo/product-setka.jpg'),
   },
   {
     value: 'zhalyuzi',
     label: 'Забор-жалюзи',
     note: 'современный вид',
-    image: '/media/demo/product-zhalyuzi.jpg',
+    image: assetPath('/media/demo/product-zhalyuzi.jpg'),
   },
   {
     value: 'komplekt',
@@ -49,7 +54,7 @@ export const FENCE_TYPES: Option<FenceType>[] = [
     value: 'tolko-vorota',
     label: 'Только ворота',
     note: 'забор уже есть',
-    image: '/media/demo/product-vorota.jpg',
+    image: assetPath('/media/demo/product-vorota.jpg'),
   },
 ];
 
